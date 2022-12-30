@@ -1,10 +1,10 @@
 import styles from './style.module.scss';
 
-interface HeaderProps {
+interface SidebarProps {
     title: string;
 }
 
-const Header = ({title}: HeaderProps) => {
+const Sidebar = ({title}: SidebarProps) => {
     return (
         <div className={styles.bandeau}>
             <img src="/favicon.ico" alt="logo" />
@@ -13,4 +13,4 @@ const Header = ({title}: HeaderProps) => {
     )
 }
 
-export default Header
+export default Sidebar
