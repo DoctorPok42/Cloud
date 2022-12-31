@@ -1,0 +1,22 @@
+.sidebar {
+    width: 250px;
+    height: 100%;
+    // border-right: 1px solid var(--grey);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 20px 0;
+
+    .icon {
+        margin-left: 20px;
+        color: var(--black);
+    }
+
+    h2 {
+        margin-left: 30px;
+        color: var(--black);
+        font-size: 1.2rem;
+        font-weight: 1;
+    }
+}
