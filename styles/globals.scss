@@ -5,8 +5,9 @@
 
 :root {
   --white: #fff;
-  --white2: rgba(255, 255, 255, 0.5)
-  --black: #000;
+  --white2: rgba(255, 255, 255, 0.5);
+  --black: #2b2b2b;
+  --black3: rgba(43, 43, 43, 0.8);
   --grey: rgb(231, 231, 229);
   --blue: #38a6d1;
   --blue2: rgba(56, 166, 209, 0.5);
@@ -29,7 +30,12 @@ body {
   box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   padding: 0;
 }
