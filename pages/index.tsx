@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useState } from "react";
 import { Header, Sidebar, Content } from "../components";
-import { Index, Part } from "../types/index";
+import { Part } from "../types/index";
 import { Client } from "ssh2";
 
 export default function Home({ data }: any) {

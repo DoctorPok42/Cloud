@@ -1,0 +1,122 @@
+.login_container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    user-select: none;
+  }
+
+  .login {
+    min-width: 500px;
+    min-height: 350px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+
+    .title {
+      font-size: 30px;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      user-select: none;
+
+      .logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      h2 {
+        margin: 0;
+      }
+    }
+
+    .alert {
+      margin-top: 15px;
+      user-select: none;
+    }
+
+    .form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-top: 30px;
+
+      .input {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+
+        label {
+          font-size: 20px;
+          font-weight: 600;
+          margin-bottom: 10px;
+        }
+
+        input {
+          width: 100%;
+          height: 40px;
+          border: 1px solid var(--black);
+          border-radius: 5px;
+          padding: 0 10px;
+          font-size: 20px;
+          outline: none;
+          transition: 0.2s all ease-in-out;
+        }
+
+        input:hover {
+          border: 1px solid var(--blue);
+        }
+
+        input:focus {
+          border: 1px solid var(--blue);
+        }
+      }
+
+      .button {
+        width: 40%;
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        background: var(--black);
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        user-select: none;
+      }
+    }
+  }
+}

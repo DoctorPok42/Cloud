@@ -11,8 +11,8 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ page, setPage }: SidebarProps) => {
-  const handleChangePart = (part: Part) => {
-    if (part === "my_drive") {
+  const handleChangePart = (part: Part, name: string) => {
+    if (part === "my_drive" && name === "shared_drive") {
       setPage("shared_drive");
       window.location.href = "/shared";
     } else {
