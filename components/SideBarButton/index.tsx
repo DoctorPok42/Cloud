@@ -4,7 +4,7 @@ import styles from "./style.module.scss";
 interface SidebarButtonProps {
   name: string;
   page: Part;
-  handleChangePart: (part: Part, name: string) => void;
+  handleChangePart: (name: string) => void;
   children: React.ReactNode;
 }
 
@@ -20,7 +20,7 @@ const SidebarButton = ({
       style={{
         backgroundColor: page === name ? "var(--blue)" : undefined,
       }}
-      onClick={() => handleChangePart(page, name)}
+      onClick={() => handleChangePart(name)}
     >
       {children}
     </a>

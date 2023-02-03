@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFolder,
-  faFile,
   faFileAudio,
   faFileLines,
 } from "@fortawesome/free-solid-svg-icons";
