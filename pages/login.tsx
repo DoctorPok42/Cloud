@@ -5,19 +5,15 @@ import { useState } from "react";
 import { NextApiResponse } from "next";
 
 import styles from "../styles/Login.module.scss";
-import { Alert } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 
 const Login = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    res: NextApiResponse
-  ) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     setError("");
     try {
@@ -33,7 +29,8 @@ const Login = () => {
         setError(data.error);
         setLoading(false);
       } else {
-        res.setHeader("Set-Cookie", `username=${username}`);
+        setLoading(false);
+        setError("");
         router.push("/");
       }
     } catch (error) {
@@ -74,7 +71,11 @@ const Login = () => {
         </div>
 
         {error != "" && (
-          <Alert className={styles.alert} severity="error">
+          <Alert
+            className={styles.alert}
+            severity="error"
+            onClose={() => setError("")}
+          >
             {error}
           </Alert>
         )}
@@ -105,9 +106,29 @@ const Login = () => {
               }}
             />
           </div>
-          <button className={styles.button} onClick={() => handleSubmit}>
+          <a
+            className={styles.button}
+            style={{
+              backgroundColor: loading ? "var(--blue)" : "var(--black)",
+              cursor: loading ? "not-allowed" : "pointer",
+            }}
+            onClick={() => {
+              username && password != ""
+                ? handleSubmit()
+                : username == ""
+                ? setError("Username is required")
+                : setError("Password is required");
+            }}
+          >
             Login
-          </button>
+            {loading && (
+              <CircularProgress
+                size={20}
+                className={styles.circle}
+                color="inherit"
+              />
+            )}
+          </a>
         </form>
       </div>
     </div>
