@@ -4,7 +4,7 @@ import { Header, Sidebar, Content } from "../components";
 import { Part } from "../types/index";
 import { Client } from "ssh2";
 
-export default function Home({ data }: any) {
+export default function Home({ data, cookies }: any) {
   const [page, setPage] = useState<Part>("my_drive");
   return (
     <>
@@ -15,7 +15,7 @@ export default function Home({ data }: any) {
         <meta name="author" content="DoctorPok" />
         <meta name="keywords" content="Cloud" />
       </Head>
-      <Header title="Cloud" />
+      <Header title="Cloud" cookies={cookies} />
 
       <Sidebar page={page} setPage={setPage} />
       <Content data={data} />
@@ -24,6 +24,18 @@ export default function Home({ data }: any) {
 }
 
 export async function getServerSideProps(ctx: any) {
+  const cookies = ctx.req.headers.cookie;
+  if (!cookies) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const username = cookies?.split("=")[1];
+
   const conn = new Client();
   const data = await new Promise((resolve, reject) => {
     conn
@@ -31,7 +43,7 @@ export async function getServerSideProps(ctx: any) {
         conn.sftp(function (err: any, sftp: any) {
           if (err) throw err;
           sftp.readdir(
-            "/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/Musique",
+            `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${username}`,
             function (err: any, list: any) {
               if (err) throw err;
               resolve(list);
@@ -51,6 +63,7 @@ export async function getServerSideProps(ctx: any) {
     props: {
       page: ctx.query,
       data: JSON.parse(JSON.stringify(data)),
+      cookies: JSON.parse(JSON.stringify(cookies)),
     },
   };
 }

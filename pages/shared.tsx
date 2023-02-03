@@ -4,7 +4,7 @@ import { Header, Sidebar, Content } from "../components";
 import { Index, Part } from "../types/index";
 import { Client } from "ssh2";
 
-export default function Shared({ data }: any) {
+export default function Shared({ data, cookies }: any) {
   const [page, setPage] = useState<Part>("shared_drive");
   return (
     <>
@@ -15,7 +15,7 @@ export default function Shared({ data }: any) {
         <meta name="author" content="DoctorPok" />
         <meta name="keywords" content="Cloud" />
       </Head>
-      <Header title="Cloud" />
+      <Header title="Cloud" cookies={cookies} />
 
       <Sidebar page={page} setPage={setPage} />
       <Content data={data} />
@@ -24,6 +24,16 @@ export default function Shared({ data }: any) {
 }
 
 export async function getServerSideProps(ctx: any) {
+  const cookies = ctx.req.headers.cookie;
+  if (!cookies) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
   const conn = new Client();
   const data = await new Promise((resolve, reject) => {
     conn
@@ -51,6 +61,7 @@ export async function getServerSideProps(ctx: any) {
     props: {
       page: ctx.query,
       data: JSON.parse(JSON.stringify(data)),
+      cookies: JSON.parse(JSON.stringify(cookies)),
     },
   };
 }
