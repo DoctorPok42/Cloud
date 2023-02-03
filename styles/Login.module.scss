@@ -107,7 +107,6 @@
       .button {
         width: 40%;
         height: 40px;
-        border: none;
         border-radius: 5px;
         background: var(--black);
         color: #fff;
@@ -116,6 +115,20 @@
         cursor: pointer;
         outline: none;
         user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.2s all ease-in-out;
+        position: relative;
+
+        &:hover {
+          background: var(--blue);
+        }
+
+        .circle {
+          position: absolute;
+          right: 15px;
+        }
       }
     }
   }
