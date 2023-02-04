@@ -2,10 +2,9 @@ import Head from "next/head";
 import Image from "next/image";
 import router from "next/router";
 import { useState } from "react";
-import { NextApiResponse } from "next";
 
 import styles from "../styles/Login.module.scss";
-import { Alert, CircularProgress } from "@mui/material";
+import { Alert } from "@mui/material";
 
 const Login = () => {
   const [username, setUsername] = useState<string>("");
@@ -42,19 +41,13 @@ const Login = () => {
   return (
     <div className={styles.login_container}>
       <Head>
-        <title>Cloud | Login</title>
+        <title>Login | Cloud</title>
         <meta name="description" content="Cloud" />
         <meta name="author" content="DoctorPok" />
         <meta name="keywords" content="Cloud" />
       </Head>
 
-      <Image
-        className={styles.img}
-        src="/login.jpg"
-        alt="Cloud"
-        width={3000}
-        height={3000}
-      />
+      <div className={styles.back}></div>
       <div className={styles.login}>
         <div className={styles.title}>
           <Image
@@ -64,7 +57,9 @@ const Login = () => {
             width={70}
             height={70}
             style={{
-              animation: loading ? "spin 1s linear infinite" : "",
+              animation: loading
+                ? "spin 1s infinite cubic-bezier(0.09, 0.57, 0.49, 0.9)"
+                : "",
             }}
           />
           <h2>Login</h2>
@@ -109,8 +104,13 @@ const Login = () => {
           <a
             className={styles.button}
             style={{
-              backgroundColor: loading ? "var(--blue)" : "var(--black)",
+              backgroundColor: loading
+                ? "var(--blue)"
+                : error != ""
+                ? "var(--red)"
+                : "var(--black)",
               cursor: loading ? "not-allowed" : "pointer",
+              animation: error != "" ? "shake 0.5s" : "",
             }}
             onClick={() => {
               username && password != ""
@@ -121,15 +121,13 @@ const Login = () => {
             }}
           >
             Login
-            {loading && (
-              <CircularProgress
-                size={20}
-                className={styles.circle}
-                color="inherit"
-              />
-            )}
           </a>
         </form>
+      </div>
+      <div className={styles.display_status}>
+        <h2>
+          --- Chek <a href="/status">status</a> ---
+        </h2>
       </div>
     </div>
   );
