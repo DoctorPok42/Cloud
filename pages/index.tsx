@@ -18,7 +18,7 @@ export default function Home({ data, cookies }: any) {
       <Header title="Cloud" cookies={cookies} />
 
       <Sidebar page={page} setPage={setPage} />
-      <Content data={data} />
+      <Content data={data} username={cookies.username} />
     </>
   );
 }
