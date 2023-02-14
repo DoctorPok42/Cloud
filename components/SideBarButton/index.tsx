@@ -3,7 +3,7 @@ import styles from "./style.module.scss";
 
 interface SidebarButtonProps {
   name: string;
-  page: Part;
+  page: string;
   handleChangePart: (name: string) => void;
   children: React.ReactNode;
 }

@@ -10,7 +10,7 @@ import styles from "./style.module.scss";
 import SidebarButton from "../SideBarButton";
 
 interface SidebarProps {
-  page: Part;
+  page: string;
   setPage: (page: Part) => void;
 }
 
@@ -25,9 +25,9 @@ const Sidebar = ({ page, setPage }: SidebarProps) => {
         setPage("shared_drive");
         window.location.href = "/shared";
         break;
-      case "musique":
-        setPage("musique");
-        window.location.href = "/musique";
+      case "music":
+        setPage("music");
+        window.location.href = "/music";
         break;
     }
   };
@@ -39,8 +39,8 @@ const Sidebar = ({ page, setPage }: SidebarProps) => {
         page={page}
         handleChangePart={handleChangePart}
       >
-        <FontAwesomeIcon icon={faHardDrive} className={styles.icon} />
-        <h2>Mon drive</h2>
+        <FontAwesomeIcon icon={faHardDrive} className={styles.sideicon} />
+        <h2>My drive</h2>
       </SidebarButton>
 
       <SidebarButton
@@ -48,17 +48,17 @@ const Sidebar = ({ page, setPage }: SidebarProps) => {
         page={page}
         handleChangePart={handleChangePart}
       >
-        <FontAwesomeIcon icon={faUserGroup} className={styles.icon} />
-        <h2>Drive partagé</h2>
+        <FontAwesomeIcon icon={faUserGroup} className={styles.sideicon} />
+        <h2>Shared drive</h2>
       </SidebarButton>
 
       <SidebarButton
-        name="musique"
+        name="music"
         page={page}
         handleChangePart={handleChangePart}
       >
-        <FontAwesomeIcon icon={faMusic} className={styles.icon} />
-        <h2>Musique</h2>
+        <FontAwesomeIcon icon={faMusic} className={styles.sideicon} />
+        <h2>Music</h2>
       </SidebarButton>
     </div>
   );

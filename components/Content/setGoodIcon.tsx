@@ -5,6 +5,10 @@ import {
   faFileVideo,
   faFileImage,
   faFileWord,
+  faFilePdf,
+  faFilePowerpoint,
+  faFileCsv,
+  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface ContentProps {
@@ -18,7 +22,23 @@ const setGoondIcon = ({ filename }: ContentProps) => {
   const code = ["html", "css", "js", "ts", "jsx", "tsx", "json"];
   const video = ["mp4", "mov", "avi"];
   const img = ["jpg", "png", "gif", "svg", "jpeg"];
-  const doc = ["doc", "docx", "pdf", "xls", "xlsx", "ppt", "pptx"];
+  const doc = ["doc", "docx", "xls", "xlsx"];
+  const pdf = ["pdf"];
+  const ppt = ["ppt", "pptx"];
+  const csv = ["csv"];
+
+  if (
+    filename === "undefined" ||
+    filename === "null" ||
+    filename === "" ||
+    filename === " " ||
+    extension === "undefined" ||
+    extension === "null" ||
+    extension === "" ||
+    extension === " "
+  ) {
+    return faFile;
+  }
 
   if (audio.includes(extension)) {
     return faFileAudio;
@@ -37,6 +57,15 @@ const setGoondIcon = ({ filename }: ContentProps) => {
   }
   if (doc.includes(extension)) {
     return faFileWord;
+  }
+  if (pdf.includes(extension)) {
+    return faFilePdf;
+  }
+  if (ppt.includes(extension)) {
+    return faFilePowerpoint;
+  }
+  if (csv.includes(extension)) {
+    return faFileCsv;
   }
 };
 
