@@ -1,11 +1,45 @@
 import Head from "next/head";
-import { useState } from "react";
-import { Header, Sidebar, Content } from "../components";
-import { Index, Part } from "../types/index";
+import { useEffect, useState } from "react";
+import { Header, Sidebar, Content, UploadButton } from "../components";
+import { Part } from "../types/index";
 import { Client } from "ssh2";
 
-export default function Shared({ data, cookies }: any) {
-  const [page, setPage] = useState<Part>("shared_drive");
+interface SharedProps {
+  dataFirst: any;
+  cookies: string;
+}
+
+export default function Shared({ dataFirst, cookies }: SharedProps) {
+  const [path, setPath] = useState<string>("shared_drive");
+  const [newPath, setNewPath] = useState<string>("Storage");
+  const [status, setStatus] = useState<string>("");
+  const [data, setData] = useState<any>(dataFirst);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [update, setUpdate] = useState<boolean>(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("/api/getFiles", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newPath: newPath,
+      }),
+    })
+      .then((res) => res.json())
+      .then(async (data) => {
+        if (data.error) {
+          setStatus("Error: " + data.error);
+        } else {
+          await setData(data.data);
+        }
+        setLoading(false);
+        setUpdate(false);
+      });
+  }, [newPath, update]);
+
   return (
     <>
       <Head>
@@ -15,10 +49,25 @@ export default function Shared({ data, cookies }: any) {
         <meta name="author" content="DoctorPok" />
         <meta name="keywords" content="Cloud" />
       </Head>
-      <Header title="Cloud" cookies={cookies} />
+      <Header title="Cloud" cookies={cookies} loading={loading} />
 
-      <Sidebar page={page} setPage={setPage} />
-      <Content data={data} username={cookies.username} />
+      <Sidebar page={path} setPage={setPath} />
+      <Content
+        data={data}
+        cookies={cookies}
+        status={status}
+        setStatus={setStatus}
+        path={path}
+        newPath={newPath}
+        setNewPath={setNewPath}
+        loading={loading}
+        setUpdate={setUpdate}
+      />
+      <UploadButton
+        cookies={cookies}
+        setStatus={setStatus}
+        setUpdate={setUpdate}
+      />
     </>
   );
 }
@@ -59,8 +108,7 @@ export async function getServerSideProps(ctx: any) {
   });
   return {
     props: {
-      page: ctx.query,
-      data: JSON.parse(JSON.stringify(data)),
+      dataFirst: JSON.parse(JSON.stringify(data)),
       cookies: JSON.parse(JSON.stringify(cookies)),
     },
   };

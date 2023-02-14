@@ -4,7 +4,6 @@ import styles from "../styles/Status.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { relative } from "path";
 
 const Status = ({ results }: any) => {
   return (

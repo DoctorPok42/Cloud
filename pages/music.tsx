@@ -4,14 +4,14 @@ import { Header, Sidebar, Content, UploadButton } from "../components";
 import { Part } from "../types/index";
 import { Client } from "ssh2";
 
-interface HomeProps {
+interface MusiqueProps {
   dataFirst: any;
   cookies: string;
 }
 
-export default function Home({ dataFirst, cookies }: HomeProps) {
-  const [path, setPath] = useState<string>("my_drive");
-  const [newPath, setNewPath] = useState<string>(cookies.split("=")[1]);
+export default function Shared({ dataFirst, cookies }: MusiqueProps) {
+  const [path, setPath] = useState<string>("music");
+  const [newPath, setNewPath] = useState<string>("Musique");
   const [status, setStatus] = useState<string>("");
   const [data, setData] = useState<any>(dataFirst);
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,7 +43,7 @@ export default function Home({ dataFirst, cookies }: HomeProps) {
   return (
     <>
       <Head>
-        <title>Cloud</title>
+        <title>Cloud | Musique</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
         <meta name="description" content="Cloud" />
         <meta name="author" content="DoctorPok" />
@@ -83,8 +83,6 @@ export async function getServerSideProps(ctx: any) {
     };
   }
 
-  const username = cookies?.split("=")[1];
-
   const conn = new Client();
   const data = await new Promise((resolve, reject) => {
     conn
@@ -92,7 +90,7 @@ export async function getServerSideProps(ctx: any) {
         conn.sftp(function (err: any, sftp: any) {
           if (err) throw err;
           sftp.readdir(
-            `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${username}`,
+            "/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/Musique",
             function (err: any, list: any) {
               if (err) throw err;
               resolve(list);

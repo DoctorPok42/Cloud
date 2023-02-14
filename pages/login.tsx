@@ -133,4 +133,20 @@ const Login = () => {
   );
 };
 
+export async function getServerSideProps(context: any) {
+  const { req } = context;
+  const cookies = req.headers.cookie;
+  if (cookies) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}
+
 export default Login;
