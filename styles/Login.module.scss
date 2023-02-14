@@ -87,6 +87,11 @@
           transition: 0.2s all linear;
         }
 
+        input::selection {
+          background: var(--white);
+          color: var(--black);
+        }
+
         input:hover {
           border: 2px solid var(--white);
           box-shadow: 0 0 0 2px var(--blue);

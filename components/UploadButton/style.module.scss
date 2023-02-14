@@ -1,0 +1,57 @@
+.uploadButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  .alert {
+    position: absolute;
+    bottom: 1450%;
+    right: 10px;
+    min-width: 200px;
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+    transition: all 0.3s ease;
+    background-color: var(--black);
+    padding: 25%;
+    padding-left: calc(25% + 2px);
+    border-radius: 50%;
+  }
+
+  .loadingDot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--white);
+    animation: loadingDot 1s infinite;
+  }
+}
+
+.uploadButton:hover {
+  img {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes loadingDot {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}

@@ -1,39 +1,57 @@
 .content {
+  position: absolute;
+  top: 150px;
+  left: 10px;
   margin-left: 250px;
-  width: calc(100% - 250px);
+  width: calc(100% - 260px);
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
 
-  .folder {
+  .alert {
+    position: absolute;
+    top: -75px;
+    right: 10px;
+  }
+
+  .folder,
+  .folder__bis {
     width: 230px;
     min-height: 40px;
-    box-shadow: 0 0 0px 0.5px var(--black3);
+    box-shadow: 0 0 0 1px var(--grey2);
     border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     margin: 10px;
     cursor: pointer;
-    transition: all 0.1s ease-in-out;
     padding-left: 10px;
+    transition: all 0.1s ease-in-out;
+
+    .folder__name {
+      margin: 0 10px;
+      font-size: 85%;
+      font-weight: 1;
+    }
+  }
+
+  .folder__bis {
+    background-color: var(--grey3);
   }
 
   .folder:hover {
-    background-color: var(--grey);
+    background-color: var(--grey3);
   }
 
-  .folder__name {
-    margin: 0 10px;
-    font-size: 85%;
-    font-weight: 1;
+  .folder__bis:hover {
+    background-color: var(--blue3);
   }
 
   .field {
     width: 200px;
     height: 200px;
-    box-shadow: 0 0 0px 0.5px var(--black3);
+    box-shadow: 0 0 0 1px var(--grey2);
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -52,6 +70,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.1s linear;
     }
 
     .field__icon {
@@ -68,9 +87,8 @@
   }
   .field:hover {
     .field__value {
-      background-color: var(--grey);
+      background-color: var(--grey2);
       border-radius: 0 0 5px 5px;
-      border-top: 1px solid var(--white);
     }
   }
 }
