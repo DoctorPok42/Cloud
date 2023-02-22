@@ -23,7 +23,7 @@ export default async function Login(req: NextApiRequest, res: NextApiResponse) {
                 return;
               } else {
                 res.setHeader("Set-Cookie", [
-                  `username=${body.username}; path=/;`,
+                  `username=${body.username}; path=/; Max-Age=3600`,
                 ]);
                 res.status(200).json({ data: list });
               }

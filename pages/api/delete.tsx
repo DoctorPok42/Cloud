@@ -19,7 +19,7 @@ export default function deleteFile(req: NextApiRequest, res: NextApiResponse) {
               conn.end();
               return;
             } else {
-              res.status(200).json({ data: "File deleted" });
+              res.status(200).json({ data: "File deleted!" });
             }
             conn.end();
           }
