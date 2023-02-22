@@ -1,6 +1,6 @@
-<center>
+<div align="center">
     <img src="public/favicon.ico" width="30%">
-</center>
+</div>
 
 # NAS CLOUD
 
