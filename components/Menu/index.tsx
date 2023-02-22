@@ -9,6 +9,7 @@ interface MenuProps {
   fileSize: number;
   path: string;
   setUpdate: (update: boolean) => void;
+  setLoading: (loading: boolean) => void;
 }
 
 const Menu = ({
@@ -19,6 +20,7 @@ const Menu = ({
   fileSize,
   path,
   setUpdate,
+  setLoading,
 }: MenuProps) => {
   const decodeType = (filename: string) => {
     const type = filename.lastIndexOf(".");
@@ -65,7 +67,9 @@ const Menu = ({
     }
   };
 
-  const handleDownload = async () => {
+  const handlDownload = async () => {
+    setLoading(true);
+    setStatus("Downloading...");
     const res = await fetch(`/api/download/${filename}`, {
       method: "POST",
       headers: {
@@ -93,12 +97,16 @@ const Menu = ({
         setStatus("Success: File downloaded!");
       });
       link.click();
+      setLoading(false);
+      setStatus("Success: File downloaded!");
     }
   };
 
-  const handleDelete = async (username: string, filename: string) => {
+  const handlDelete = async (username: string, filename: string) => {
     const approb = confirm("Are you sure you want to delete this file ?");
     if (!approb) return;
+    setLoading(true);
+    setStatus("Deleting...");
     const res = await fetch(`/api/delete`, {
       method: "POST",
       headers: {
@@ -113,8 +121,10 @@ const Menu = ({
     const data = await res.json();
     if (data.error) {
       setStatus("Error:" + data.error) as any;
+      setLoading(false);
     } else {
       setStatus("Success: File deleted!") as any;
+      setLoading(false);
       setUpdate(true);
     }
   };
@@ -124,7 +134,7 @@ const Menu = ({
       <div
         className={styles.item}
         onClick={() => {
-          handleDownload();
+          handlDownload();
           setMenu(false);
         }}
       >
@@ -134,7 +144,7 @@ const Menu = ({
       <div
         className={styles.item}
         onClick={() => {
-          handleDelete(username, filename);
+          handlDelete(username, filename);
           setMenu(false);
         }}
       >

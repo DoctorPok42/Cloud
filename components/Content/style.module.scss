@@ -1,6 +1,6 @@
 .content {
   position: absolute;
-  top: 150px;
+  top: 115px;
   left: 10px;
   margin-left: 250px;
   width: calc(100% - 260px);
@@ -11,12 +11,13 @@
 
   .alert {
     position: absolute;
-    top: -75px;
+    top: -40px;
     right: 10px;
   }
 
   .folder,
-  .folder__bis {
+  .folder__bis,
+  .folder__delete {
     width: 230px;
     min-height: 40px;
     box-shadow: 0 0 0 1px var(--grey2);
@@ -36,7 +37,8 @@
     }
   }
 
-  .folder__bis {
+  .folder__bis,
+  .folder__delete {
     background-color: var(--grey3);
   }
 
@@ -46,6 +48,10 @@
 
   .folder__bis:hover {
     background-color: var(--blue3);
+  }
+
+  .folder__delete:hover {
+    background-color: var(--red2);
   }
 
   .field {

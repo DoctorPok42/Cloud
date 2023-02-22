@@ -12,9 +12,17 @@ interface FileProps {
   username: string;
   path: string;
   setUpdate: (update: boolean) => void;
+  setLoading: (loading: boolean) => void;
 }
 
-const DisplayFile = ({ item, setStatus, username, path, setUpdate }: FileProps) => {
+const DisplayFile = ({
+  item,
+  setStatus,
+  username,
+  path,
+  setUpdate,
+  setLoading,
+}: FileProps) => {
   const [menu, setMenu] = useState<boolean>(false);
   return (
     <div
@@ -44,6 +52,7 @@ const DisplayFile = ({ item, setStatus, username, path, setUpdate }: FileProps) 
           fileSize={item.attrs.size}
           path={path}
           setUpdate={setUpdate}
+          setLoading={setLoading}
         />
       )}
     </div>

@@ -13,14 +13,14 @@ const AvatarIcon = ({ username }: AvatarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handlClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handlClose = () => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
+  const handlLogout = () => {
     fetch(`/api/logout`, {
       method: "POST",
       headers: {
@@ -36,7 +36,7 @@ const AvatarIcon = ({ username }: AvatarProps) => {
   return (
     <div className={styles.avatar}>
       <IconButton
-        onClick={handleClick}
+        onClick={handlClick}
         aria-controls={open ? "account-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
@@ -50,8 +50,8 @@ const AvatarIcon = ({ username }: AvatarProps) => {
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
-        onClose={handleClose}
-        onClick={handleClose}
+        onClose={handlClose}
+        onClick={handlClose}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -81,7 +81,7 @@ const AvatarIcon = ({ username }: AvatarProps) => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleLogout}>
+        <MenuItem onClick={handlLogout}>
           <FontAwesomeIcon
             icon={faArrowRightFromBracket}
             style={{ marginRight: "10px", color: "var(--red)" }}

@@ -1,5 +1,4 @@
 import { SpeedDial, SpeedDialAction } from "@mui/material";
-import { useState } from "react";
 import styles from "./style.module.scss";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,16 +6,31 @@ import {
   faHardDrive,
   faUserGroup,
   faMusic,
+  faFolderPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import uploadFile from "./uploadFile";
 
 interface UploadButtonProps {
   cookies: string;
   setStatus: (status: string) => void;
+  setLoading: (loading: boolean) => void;
+  newPath: string;
   setUpdate: (update: boolean) => void;
 }
 
-const UploadButton = ({ cookies, setStatus, setUpdate }: UploadButtonProps) => {
+const UploadButton = ({
+  cookies,
+  setStatus,
+  setLoading,
+  newPath,
+  setUpdate,
+}: UploadButtonProps) => {
   const action = [
+    {
+      icon: <FontAwesomeIcon icon={faFolderPlus} />,
+      name: "Create folder here",
+      path: "Folder",
+    },
     {
       icon: <FontAwesomeIcon icon={faMusic} />,
       name: "Music",
@@ -34,43 +48,6 @@ const UploadButton = ({ cookies, setStatus, setUpdate }: UploadButtonProps) => {
     },
   ];
 
-  const uploadFile = async (path: string | null) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.multiple = true;
-    input.click();
-    input.onchange = async (event: any) => {
-      const files = event.target && event.target.files;
-      if (!files || files === null) return null;
-      const reader = new FileReader();
-      reader.readAsText(files[0]);
-      reader.onload = async () => {
-        const fileData = reader.result;
-
-        const res = await fetch("http://localhost:3000/api/upload", {
-          method: "POST",
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          body: JSON.stringify({
-            username: cookies.split("=")[1],
-            path: path,
-            fileData: fileData,
-            fileName: files[0].name,
-            filesSize: files[0].size,
-          }),
-        });
-        const data = await res.json();
-        if (data.error) {
-          setStatus("Error: " + data.error);
-        } else {
-          setStatus("Success: File uploaded!");
-          setUpdate(true);
-        }
-      };
-    };
-  };
-
   return (
     <div className={styles.uploadButton}>
       <SpeedDial
@@ -84,7 +61,13 @@ const UploadButton = ({ cookies, setStatus, setUpdate }: UploadButtonProps) => {
             icon={action.icon}
             tooltipTitle={action.name}
             onClick={(e) => {
-              uploadFile(action.path);
+              uploadFile(action.path, {
+                cookies,
+                setStatus,
+                setLoading,
+                newPath,
+                setUpdate,
+              });
             }}
           />
         ))}

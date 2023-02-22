@@ -1,18 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolder } from "@fortawesome/free-solid-svg-icons";
+import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
 import styles from "./style.module.scss";
 import DisplayFile from "./file";
+import handlDeleteFolder from "./deleteFolder";
 import { Alert } from "@mui/material";
+import { Part } from "../../types";
 
 interface ContentProps {
   data: any;
   cookies: string;
   status: string;
   setStatus: (status: string) => void;
-  path: string;
+  path: Part;
   newPath: string;
   setNewPath: (newPath: string) => void;
-  loading: boolean;
+  setLoading: (loading: boolean) => void;
   setUpdate: (update: boolean) => void;
 }
 
@@ -22,9 +24,9 @@ const Content = ({
   status,
   setStatus,
   path,
-newPath,
+  newPath,
   setNewPath,
-  loading,
+  setLoading,
   setUpdate,
 }: ContentProps) => {
   const username = cookies.split("=")[1];
@@ -53,11 +55,22 @@ newPath,
     }
   };
 
+  const handlAlert = () => {
+    switch (status.split(":")[0]) {
+      case "Error":
+        return "error";
+      case "Success":
+        return "success";
+      default:
+        return "info";
+    }
+  };
+
   return (
     <div className={styles.content}>
       {status != "" && (
         <Alert
-          severity={status.split(":")[0] === "Error" ? "error" : "success"}
+          severity={handlAlert()}
           className={styles.alert}
           onClose={() => {
             setStatus("");
@@ -67,22 +80,42 @@ newPath,
         </Alert>
       )}
       {!isRacine() && (
-        <div
-          className={styles.folder__bis}
-          onClick={() => {
-            setNewPath(newPath.split("/").slice(0, -2).join("/") + "/");
-          }}
-        >
-          <FontAwesomeIcon icon={faFolder} />
-          <p className={styles.folder__name}>..</p>
-        </div>
+        <>
+          <div
+            className={styles.folder__bis}
+            onClick={() => {
+              setNewPath(newPath.split("/").slice(0, -2).join("/") + "/");
+            }}
+          >
+            <FontAwesomeIcon icon={faFolder} />
+            <p className={styles.folder__name}>..</p>
+          </div>
+          <div
+            className={styles.folder__delete}
+            onClick={() => {
+              handlDeleteFolder(
+                newPath.split("/").slice(0, -2).join("/"),
+                newPath.split("/").slice(-2)[0],
+                {
+                  cookies: cookies,
+                  setStatus: setStatus,
+                  setNewPath: setNewPath,
+                  setLoading: setLoading,
+                }
+              );
+            }}
+          >
+            <FontAwesomeIcon icon={faFolderMinus} />
+            <p className={styles.folder__name}>Delete This Folder</p>
+          </div>
+        </>
       )}
       {data.map((item: any) => {
         return (
           <>
             {item.longname[0] === "d" && (
               <div
-                key={item.filename}
+                // key={item.filename}
                 className={styles.folder}
                 onClick={() => {
                   handlFolder(item.filename);
@@ -108,6 +141,7 @@ newPath,
               username={username}
               path={newPath}
               setUpdate={setUpdate}
+              setLoading={setLoading}
             />
           );
         }

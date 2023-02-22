@@ -1,0 +1,24 @@
+.breadCrumbs {
+  position: absolute;
+  top: 70px;
+  left: 270px;
+  width: calc(100% - 270px);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  span {
+    font-size: 16px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--black3);
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  span:hover {
+    color: var(--blue);
+  }
+}

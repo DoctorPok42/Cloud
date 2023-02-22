@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { AvatarIcon } from "../../components/";
 
 import styles from "./style.module.scss";
