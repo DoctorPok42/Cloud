@@ -1,6 +1,12 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { Header, Sidebar, Content, UploadButton } from "../components";
+import {
+  Header,
+  Sidebar,
+  Content,
+  UploadButton,
+  BreadCrumbs,
+} from "../components";
 import { Part } from "../types/index";
 import { Client } from "ssh2";
 
@@ -10,7 +16,7 @@ interface MusiqueProps {
 }
 
 export default function Shared({ dataFirst, cookies }: MusiqueProps) {
-  const [path, setPath] = useState<string>("music");
+  const [path, setPath] = useState<Part>("music");
   const [newPath, setNewPath] = useState<string>("Musique");
   const [status, setStatus] = useState<string>("");
   const [data, setData] = useState<any>(dataFirst);
@@ -52,6 +58,7 @@ export default function Shared({ dataFirst, cookies }: MusiqueProps) {
       <Header title="Cloud" cookies={cookies} loading={loading} />
 
       <Sidebar page={path} setPage={setPath} />
+      <BreadCrumbs newPath={newPath} setNewPath={setNewPath} />
       <Content
         data={data}
         cookies={cookies}
@@ -60,12 +67,14 @@ export default function Shared({ dataFirst, cookies }: MusiqueProps) {
         path={path}
         newPath={newPath}
         setNewPath={setNewPath}
-        loading={loading}
+        setLoading={setLoading}
         setUpdate={setUpdate}
       />
       <UploadButton
         cookies={cookies}
         setStatus={setStatus}
+        setLoading={setLoading}
+        newPath={newPath}
         setUpdate={setUpdate}
       />
     </>

@@ -12,7 +12,7 @@ const Login = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async () => {
+  const handlSubmit = async () => {
     setLoading(true);
     setError("");
     try {
@@ -114,7 +114,7 @@ const Login = () => {
             }}
             onClick={() => {
               username && password != ""
-                ? handleSubmit()
+                ? handlSubmit()
                 : username == ""
                 ? setError("Username is required")
                 : setError("Password is required");
@@ -126,7 +126,7 @@ const Login = () => {
       </div>
       <div className={styles.display_status}>
         <h2>
-          --- Chek <a href="/status">status</a> ---
+          --- Check <a href="/status">status</a> ---
         </h2>
       </div>
     </div>
