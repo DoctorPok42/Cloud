@@ -52,7 +52,7 @@ npm run dev
 
 1. Go to http://localhost:3000
 
-2. Login with your credentials
+2. Login with your ssh credentials
 
 3. Upload your files
 
@@ -62,7 +62,7 @@ npm run dev
 
 - [Next.js](https://nextjs.org/)
 - [TS](https://www.typescriptlang.org/)
-- [SAAS](https://sass-lang.com/)
+- [SASS](https://sass-lang.com/)
 - [SSH2](https://www.npmjs.com/package/ssh2)
 
 ## Folder structure
