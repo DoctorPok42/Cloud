@@ -6,7 +6,11 @@ export default async function uploadFile(
   res: NextApiResponse
 ) {
   var body = req.body;
-  const { username, path, fileDataArray } = JSON.parse(body);
+  const { username, token, path, fileDataArray } = JSON.parse(body);
+
+  if (!username || !token || !fileDataArray) {
+    return res.status(400).json({ error: "Missing parameters" });
+  }
 
   const fileContentsArray = [] as any;
   for (let i = 0; i < fileDataArray.length; i++) {
@@ -49,7 +53,7 @@ export default async function uploadFile(
     .connect({
       host: process.env.SFTP_URL,
       port: process.env.SFTP_PORT as unknown as number,
-      username: process.env.SFTP_USERNAME,
-      password: process.env.SFTP_PASSWORD,
+      username: username,
+      password: token,
     });
 }

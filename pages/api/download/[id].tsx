@@ -1,12 +1,20 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "ssh2";
+import { verify_token } from "../functions";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { id } = req.query;
-  const { path } = req.body;
+  const { username, token, path } = JSON.parse(req.body);
+
+  if (!username || !token || !id || !path) {
+    return res.status(400).json({ error: "Missing parameters" });
+  }
+
+  const verified = verify_token(token);
+
   const conn = new Client();
 
   conn
@@ -38,7 +46,7 @@ export default async function handler(
     .connect({
       host: process.env.SFTP_URL,
       port: process.env.SFTP_PORT as unknown as number,
-      username: process.env.SFTP_USERNAME,
-      password: process.env.SFTP_PASSWORD,
+      username: username,
+      password: verified,
     });
 }

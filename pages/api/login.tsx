@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import router from "next/router";
 import { Client } from "ssh2";
+import { createAuthToken } from "./functions";
 
 export default async function Login(req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
@@ -22,8 +23,10 @@ export default async function Login(req: NextApiRequest, res: NextApiResponse) {
                 conn.end();
                 return;
               } else {
+                const token = createAuthToken(body.password);
                 res.setHeader("Set-Cookie", [
                   `username=${body.username}; path=/; Max-Age=3600`,
+                  `token=${token}; path=/; Max-Age=3600`,
                 ]);
                 res.status(200).json({ data: list });
               }

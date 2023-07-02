@@ -1,12 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "ssh2";
+import { verify_token } from "../functions";
 
 export default function createFolder(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const body = req.body;
-  const { path, folderName } = JSON.parse(body);
+  const { username, token, path, folderName } = JSON.parse(body);
+
+  if (!username || !token || !path || !folderName) {
+    return res.status(400).json({ error: "Missing parameters" });
+  }
+
+  const verified = verify_token(token);
 
   if (!folderName) {
     res.status(400).json({ error: "Something went wrong" });
@@ -39,7 +46,7 @@ export default function createFolder(
     .connect({
       host: process.env.SFTP_URL,
       port: process.env.SFTP_PORT as unknown as number,
-      username: process.env.SFTP_USERNAME,
-      password: process.env.SFTP_PASSWORD,
+      username: username,
+      password: verified,
     });
 }

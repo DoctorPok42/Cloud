@@ -1,9 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 
 export default async function Logout(
-  req: NextApiRequest,
   res: NextApiResponse
 ) {
-  res.setHeader("Set-Cookie", ["username=; Path=/; Max-Age=-1"]);
+  res.setHeader("Set-Cookie",
+    [
+      "username=; Path=/; Max-Age=-1",
+      "token=; Path=/; Max-Age=-1"
+    ]);
   res.status(200).end();
 }
