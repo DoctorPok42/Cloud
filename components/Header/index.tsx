@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 const Header = ({ title, cookies, loading }: HeaderProps) => {
-  const username = cookies?.split("=")[1];
+  const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1] as string;
   return (
     <div className={styles.bandeau}>
       <div className={styles.logo}>

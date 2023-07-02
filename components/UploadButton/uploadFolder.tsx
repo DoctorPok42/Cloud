@@ -23,7 +23,8 @@ const uploadFolder = async ({
       "Content-Type": "multipart/form-data",
     },
     body: JSON.stringify({
-      username: cookies.split("=")[1],
+      username: cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1],
+      token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
       path: newPath,
       folderName: folderName,
     }),

@@ -29,12 +29,11 @@ const Content = ({
   setLoading,
   setUpdate,
 }: ContentProps) => {
-  const username = cookies.split("=")[1];
+  const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
   const isRacine = () => {
     if (newPath === username || newPath === username + "/") {
       return true;
     }
-    if (newPath === "Storage" || newPath === "Storage/") {
       return true;
     }
     if (newPath === "Musique" || newPath === "Musique/") {
@@ -138,7 +137,7 @@ const Content = ({
             <DisplayFile
               item={item}
               setStatus={setStatus}
-              username={username}
+              cookies={cookies}
               path={newPath}
               setUpdate={setUpdate}
               setLoading={setLoading}

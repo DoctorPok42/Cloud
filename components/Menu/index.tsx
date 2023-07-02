@@ -4,7 +4,7 @@ import { Part } from "../../types";
 interface MenuProps {
   setMenu: (value: boolean) => void;
   setStatus: (value: string) => void;
-  username: string;
+  cookies: string;
   filename: string;
   fileSize: number;
   path: string;
@@ -15,13 +15,15 @@ interface MenuProps {
 const Menu = ({
   setMenu,
   setStatus,
-  username,
+  cookies,
   filename,
   fileSize,
   path,
   setUpdate,
   setLoading,
 }: MenuProps) => {
+  const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
+  const token = cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1];
   const decodeType = (filename: string) => {
     const type = filename.lastIndexOf(".");
     switch (filename.substring(type + 1)) {
@@ -59,7 +61,6 @@ const Menu = ({
       case "my_drive":
         return null;
       case "shared_drive":
-        return "Storage";
       case "music":
         return "Musique";
       default:
@@ -78,6 +79,7 @@ const Menu = ({
       body: JSON.stringify({
         path: setGoogPath(),
         username: username,
+        token: token,
       }),
     });
     const data = await res.json();
@@ -102,7 +104,7 @@ const Menu = ({
     }
   };
 
-  const handlDelete = async (username: string, filename: string) => {
+  const handlDelete = async (filename: string) => {
     const approb = confirm("Are you sure you want to delete this file ?");
     if (!approb) return;
     setLoading(true);
@@ -114,6 +116,7 @@ const Menu = ({
       },
       body: JSON.stringify({
         username: username,
+        token: token,
         filename: filename,
         path: setGoogPath(),
       }),
@@ -144,7 +147,7 @@ const Menu = ({
       <div
         className={styles.item}
         onClick={() => {
-          handlDelete(username, filename);
+          handlDelete(filename);
           setMenu(false);
         }}
       >

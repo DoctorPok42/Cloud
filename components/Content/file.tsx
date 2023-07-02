@@ -9,7 +9,7 @@ import { Part } from "../../types";
 interface FileProps {
   item: any;
   setStatus: (status: string) => void;
-  username: string;
+  cookies: string;
   path: string;
   setUpdate: (update: boolean) => void;
   setLoading: (loading: boolean) => void;
@@ -18,7 +18,7 @@ interface FileProps {
 const DisplayFile = ({
   item,
   setStatus,
-  username,
+  cookies,
   path,
   setUpdate,
   setLoading,
@@ -47,7 +47,7 @@ const DisplayFile = ({
         <Menu
           setMenu={setMenu}
           setStatus={setStatus}
-          username={username}
+          cookies={cookies}
           filename={item.filename}
           fileSize={item.attrs.size}
           path={path}
