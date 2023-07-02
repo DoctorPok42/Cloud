@@ -9,6 +9,7 @@ import {
 } from "../components";
 import { Part } from "../types/index";
 import { Client } from "ssh2";
+import { verify_token } from "./api/functions";
 
 interface MusiqueProps {
   dataFirst: any;
@@ -16,6 +17,7 @@ interface MusiqueProps {
 }
 
 export default function Shared({ dataFirst, cookies }: MusiqueProps) {
+  const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1] as string;
   const [path, setPath] = useState<Part>("music");
   const [newPath, setNewPath] = useState<string>("Musique");
   const [status, setStatus] = useState<string>("");
@@ -32,6 +34,8 @@ export default function Shared({ dataFirst, cookies }: MusiqueProps) {
       },
       body: JSON.stringify({
         newPath: newPath,
+        username: username,
+        token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
       }),
     })
       .then((res) => res.json())
@@ -57,7 +61,6 @@ export default function Shared({ dataFirst, cookies }: MusiqueProps) {
       </Head>
       <Header title="Cloud" cookies={cookies} loading={loading} />
 
-      <Sidebar page={path} setPage={setPath} />
       <BreadCrumbs newPath={newPath} setNewPath={setNewPath} />
       <Content
         data={data}
@@ -92,6 +95,11 @@ export async function getServerSideProps(ctx: any) {
     };
   }
 
+  const username = cookies.split(";").find((item: string) => item.trim().startsWith("username="))?.split("=")[1];
+  const token = cookies.split(";").find((item: string) => item.trim().startsWith("token="))?.split("=")[1];
+
+  const verify = verify_token(token)
+
   const conn = new Client();
   const data = await new Promise((resolve, reject) => {
     conn
@@ -111,8 +119,8 @@ export async function getServerSideProps(ctx: any) {
       .connect({
         host: process.env.SFTP_URL,
         port: process.env.SFTP_PORT as unknown as number,
-        username: process.env.SFTP_USERNAME,
-        password: process.env.SFTP_PASSWORD,
+        username: username,
+        password: verify,
       });
   });
   return {

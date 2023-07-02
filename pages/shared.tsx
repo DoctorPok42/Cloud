@@ -9,6 +9,7 @@ import {
 } from "../components";
 import { Part } from "../types/index";
 import { Client } from "ssh2";
+import { verify_token } from "./api/functions";
 
 interface SharedProps {
   dataFirst: any;
@@ -16,8 +17,8 @@ interface SharedProps {
 }
 
 export default function Shared({ dataFirst, cookies }: SharedProps) {
+  const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1] as string;
   const [path, setPath] = useState<Part>("shared_drive");
-  const [newPath, setNewPath] = useState<string>("Storage");
   const [status, setStatus] = useState<string>("");
   const [data, setData] = useState<any>(dataFirst);
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,6 +33,8 @@ export default function Shared({ dataFirst, cookies }: SharedProps) {
       },
       body: JSON.stringify({
         newPath: newPath,
+        username: username,
+        token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
       }),
     })
       .then((res) => res.json())
@@ -57,7 +60,6 @@ export default function Shared({ dataFirst, cookies }: SharedProps) {
       </Head>
       <Header title="Cloud" cookies={cookies} loading={loading} />
 
-      <Sidebar page={path} setPage={setPath} />
       <BreadCrumbs newPath={newPath} setNewPath={setNewPath} />
       <Content
         data={data}
@@ -92,6 +94,10 @@ export async function getServerSideProps(ctx: any) {
     };
   }
 
+  const username = cookies.split(";").find((item: string) => item.trim().startsWith("username="))?.split("=")[1];
+  const token = cookies.split(";").find((item: string) => item.trim().startsWith("token="))?.split("=")[1];
+
+  const verify = verify_token(token)
   const conn = new Client();
   const data = await new Promise((resolve, reject) => {
     conn
@@ -111,8 +117,8 @@ export async function getServerSideProps(ctx: any) {
       .connect({
         host: process.env.SFTP_URL,
         port: process.env.SFTP_PORT as unknown as number,
-        username: process.env.SFTP_USERNAME,
-        password: process.env.SFTP_PASSWORD,
+        username: username,
+        password: verify,
       });
   });
   return {
