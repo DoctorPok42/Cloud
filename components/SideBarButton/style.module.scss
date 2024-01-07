@@ -1,14 +1,25 @@
-.button {
-  width: 100%;
+.SidebarButton {
+  width: 95%;
   height: 40px;
   border: none;
-  border-radius: 0 90px 90px 0;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+
+  .active {
+    position: absolute;
+    height: 70%;
+    width: 0.5em;
+    border-radius: 0 8px 8px 0;
+    background-color: var(--blue);
+    transition: var(--transition);
+  }
 }
 
-.button:hover {
+.SidebarButton:hover {
   background-color: var(--grey3);
 }

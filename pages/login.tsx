@@ -99,6 +99,15 @@ const Login = () => {
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
+              onKeyPress={(e) => {
+                if (e.key == "Enter") {
+                  username && password != ""
+                    ? handlSubmit()
+                    : username == ""
+                    ? setError("Username is required")
+                    : setError("Password is required");
+                }
+              }}
             />
           </div>
           <a

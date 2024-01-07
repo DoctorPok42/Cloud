@@ -1,18 +1,12 @@
 .breadCrumbs {
-  position: absolute;
-  top: 70px;
-  left: 270px;
-  width: calc(100% - 270px);
-  height: 50px;
-  display: flex;
-  align-items: center;
-  align-items: center;
-  transition: all 0.2s ease;
+  margin-left: 1em;
+  transition: all 0.2s ease-in-out;
 
   span {
     font-size: 16px;
     font-weight: 600;
     font-style: italic;
+    text-transform: capitalize;
     color: var(--black3);
     cursor: pointer;
     transition: 0.2s;

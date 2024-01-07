@@ -9,7 +9,9 @@ interface AvatarProps {
   username: string;
 }
 
-const AvatarIcon = ({ username }: AvatarProps) => {
+const AvatarIcon = ({
+  username
+}: AvatarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -43,7 +45,7 @@ const AvatarIcon = ({ username }: AvatarProps) => {
       >
         <img
           alt={username}
-          src={`https://avatars.dicebear.com/api/initials/${username}.png?radius=50`}
+          src={`https://api.dicebear.com/7.x/adventurer-neutral/png?seed=${username}&radius=50`}
         />
       </IconButton>
       <Menu

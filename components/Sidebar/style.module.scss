@@ -1,12 +1,32 @@
 .sidebar {
-  width: 250px;
+  width: 13.5%;
   height: 100%;
-  // border-right: 1px solid var(--grey);
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   align-items: flex-start;
-  padding: 20px 0;
+  padding: 1.5em 0;
+  margin-right: 0.4em;
+  gap: 0.3em;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3em;
+
+    img {
+      width: 45px;
+      height: 45px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-left: 8px;
+      color: var(--black);
+    }
+  }
 
   .sideicon {
     margin-left: 20px;

@@ -1,29 +1,25 @@
-import { AvatarIcon } from "../../components/";
+import { AvatarIcon, BreadCrumbs } from "../../components/";
 
 import styles from "./style.module.scss";
 
 interface HeaderProps {
-  title: string;
   cookies: string;
-  loading: boolean;
+  path: string;
+  setPath: (path: string) => void;
 }
 
-const Header = ({ title, cookies, loading }: HeaderProps) => {
+const Header = ({
+  cookies,
+  path,
+  setPath,
+}: HeaderProps) => {
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1] as string;
   return (
     <div className={styles.bandeau}>
-      <div className={styles.logo}>
-        <img
-          src="/favicon.ico"
-          alt="logo"
-          style={{
-            animation: loading
-              ? "spin 1s infinite cubic-bezier(0.09, 0.57, 0.49, 0.9)"
-              : "",
-          }}
-        />
-        <h2>{title}</h2>
-      </div>
+      <BreadCrumbs
+        newPath={path}
+        setNewPath={setPath}
+      />
 
       <div className={styles.user}>
         <AvatarIcon username={username} />

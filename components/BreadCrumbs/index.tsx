@@ -6,7 +6,10 @@ interface BreadCrumbsProps {
   setNewPath: (newPath: string) => void;
 }
 
-const BreadCrumbs = ({ newPath, setNewPath }: BreadCrumbsProps) => {
+const BreadCrumbs = ({
+  newPath,
+  setNewPath
+}: BreadCrumbsProps) => {
   const handlFolder = (oldpath: string, newPath: string) => {
     if (oldpath.slice(0, newPath.length) === newPath) {
       const index = oldpath.indexOf(newPath);
