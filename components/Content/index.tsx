@@ -57,6 +57,14 @@ const Content = ({
     }
   };
 
+  const handleGoBack = () => {
+    let relativePath = newPath.split("/").slice(0, -1).join("/");
+    if (relativePath === "/") {
+      relativePath = newPath.split("/")[0];
+    }
+    setNewPath(relativePath);
+  }
+
   return (
     <div className={styles.contentContainer}>
       <div className={styles.content}>
@@ -77,9 +85,7 @@ const Content = ({
             <>
               <div
                 className={styles.folder__bis}
-                onClick={() => {
-                  setNewPath(newPath.split("/").slice(0, -2).join("/") + "/");
-                }}
+                onClick={() => handleGoBack()}
               >
                 <FontAwesomeIcon icon={faFolder} />
                 <p className={styles.folder__name}>..</p>
