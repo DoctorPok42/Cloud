@@ -91,8 +91,8 @@ const Content = ({
         onConfirm={() => handleConfirm()}
         />}
         <Header cookies={cookies} path={newPath} setPath={setNewPath} />
-        <Snackbar
-          open={status !== ""}
+        {status !== "" && <Snackbar
+          open={true}
           className={styles.alert}
           autoHideDuration={500}
           onClose={() => setStatus("")}
@@ -104,7 +104,7 @@ const Content = ({
           >
             {status}
           </Alert>
-        </Snackbar>
+        </Snackbar>}
         {data !== null && <div className={styles.lists}>
           {!isRacine() && (
             <>

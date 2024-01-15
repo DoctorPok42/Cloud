@@ -5,6 +5,7 @@ import {
   Content,
 } from "../components";
 import { Part } from "../types/index";
+import { verify_token } from "./api/functions";
 
 interface HomeProps {
   cookies: string;
@@ -72,7 +73,20 @@ export default function Home({ cookies }: HomeProps) {
 
 export async function getServerSideProps(ctx: any) {
   const cookies = ctx.req.headers.cookie;
-  if (!cookies) {
+
+  let isTokenValid = false;
+  try {
+    isTokenValid = verify_token(cookies.split(";").find((item: any) => item.trim().startsWith("token="))?.split("=")[1]);
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  if (!cookies || !isTokenValid) {
     return {
       redirect: {
         destination: "/login",
