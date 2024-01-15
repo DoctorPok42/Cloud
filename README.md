@@ -53,6 +53,8 @@ npm run dev
 
 2. Login with your ssh credentials
 
+⚠️ Be sure that the user is in the **ssh** group of your server : `sudo usermod -aG ssh <username>` ⚠️
+
 3. Upload your files
 
 4. Enjoy your cloud
