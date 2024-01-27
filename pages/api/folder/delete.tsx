@@ -7,18 +7,13 @@ export default function createFolder(
   res: NextApiResponse
 ) {
   const body = req.body;
-  const { username, token, path, folderName } = JSON.parse(body);
+  const { username, token, path } = JSON.parse(body);
 
-  if (!username || !token || !path || !folderName) {
+  if (!username || !token || !path) {
     return res.status(400).json({ error: "Missing parameters" });
   }
 
   const verified = verify_token(token);
-
-  if (!folderName) {
-    res.status(400).json({ error: "Something went wrong" });
-    return;
-  }
 
   const conn = new Client();
   conn
@@ -26,7 +21,7 @@ export default function createFolder(
       conn.sftp(function (err: any, sftp: any) {
         if (err) throw err;
         sftp.rmdir(
-          `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${path}/${folderName}`,
+          `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${path}`,
           function (err: any) {
             if (err) {
               res.status(500).json({ error: "Something went wrong" });

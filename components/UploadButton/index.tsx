@@ -1,6 +1,4 @@
 import { SpeedDial, SpeedDialAction } from "@mui/material";
-import styles from "./style.module.scss";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHardDrive,
@@ -9,6 +7,8 @@ import {
   faFolderPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import uploadFile from "./uploadFile";
+
+import styles from "./style.module.scss";
 
 interface UploadButtonProps {
   cookies: string;
@@ -53,7 +53,7 @@ const UploadButton = ({
       <SpeedDial
         ariaLabel="Upload a file"
         sx={{ position: "absolute", bottom: 0, right: 0 }}
-        icon={<img src="/upload.png" />}
+        icon={<img src="./upload.png" />}
       >
         {action.map((action) => (
           <SpeedDialAction

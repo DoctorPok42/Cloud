@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import styles from "../styles/Login.module.scss";
 import { Alert } from "@mui/material";
+import { verify_token } from "./api/functions";
 
 const Login = () => {
   const [username, setUsername] = useState<string>("");
@@ -99,6 +100,15 @@ const Login = () => {
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
+              onKeyPress={(e) => {
+                if (e.key == "Enter") {
+                  username && password != ""
+                    ? handlSubmit()
+                    : username == ""
+                    ? setError("Username is required")
+                    : setError("Password is required");
+                }
+              }}
             />
           </div>
           <a
@@ -136,7 +146,21 @@ const Login = () => {
 export async function getServerSideProps(context: any) {
   const { req } = context;
   const cookies = req.headers.cookie;
-  if (cookies) {
+
+  let isTokenValid = false;
+
+  try {
+    isTokenValid = verify_token(
+      cookies.split(";").find((item: any) => item.trim().startsWith("token="))
+        ?.split("=")[1]
+    );
+  } catch (error) {
+    return {
+      props: {},
+    };
+  }
+
+  if (cookies && isTokenValid) {
     return {
       redirect: {
         destination: "/",

@@ -1,5 +1,4 @@
 import styles from "./style.module.scss";
-import { Part } from "../../types";
 
 interface MenuProps {
   setMenu: (value: boolean) => void;

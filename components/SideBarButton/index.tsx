@@ -15,12 +15,10 @@ const SidebarButton = ({
 }: SidebarButtonProps) => {
   return (
     <a
-      className={styles.button}
-      style={{
-        backgroundColor: page === name ? "var(--blue)" : undefined,
-      }}
+      className={styles.SidebarButton}
       onClick={() => handlChangePart(name)}
     >
+      {page === name && <div className={styles.active}></div>}
       {children}
     </a>
   );

@@ -1,13 +1,6 @@
 .breadCrumbs {
-  position: absolute;
-  top: 70px;
-  left: 270px;
-  width: calc(100% - 270px);
-  height: 50px;
-  display: flex;
-  align-items: center;
-  align-items: center;
-  transition: all 0.2s ease;
+  margin-left: 1em;
+  transition: all 0.2s ease-in-out;
 
   span {
     font-size: 16px;

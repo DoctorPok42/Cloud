@@ -4,18 +4,23 @@ import {
   faUserGroup,
   faMusic,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { Part } from "../../types/index";
-import styles from "./style.module.scss";
 import SidebarButton from "../SideBarButton";
 import router from "next/router";
+
+import styles from "./style.module.scss";
 
 interface SidebarProps {
   page: Part;
   setPage: (page: Part) => void;
+  loading: boolean;
 }
 
-const Sidebar = ({ page, setPage }: SidebarProps) => {
+const Sidebar = ({
+  page,
+  setPage,
+  loading,
+}: SidebarProps) => {
   const handlChangePart = (name: string) => {
     switch (name) {
       case "my_drive":
@@ -35,6 +40,19 @@ const Sidebar = ({ page, setPage }: SidebarProps) => {
 
   return (
     <div className={styles.sidebar}>
+      <div className={styles.logo}>
+        <img
+          src="/favicon.ico"
+          alt="logo"
+          style={{
+            animation: loading
+              ? "spin 1s infinite cubic-bezier(0.09, 0.57, 0.49, 0.9)"
+              : "",
+          }}
+        />
+        <h2>Cloud</h2>
+      </div>
+
       <SidebarButton
         name="my_drive"
         page={page}

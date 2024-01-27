@@ -7,17 +7,8 @@ interface ContentProps {
 
 const handlDeleteFolder = (
   path: string,
-  folderName: string,
   { cookies, setStatus, setLoading, setNewPath }: ContentProps
 ) => {
-  const confirm = window.confirm(
-    "Are you sure you want to delete this folder?"
-  );
-  if (!confirm) return;
-  if (folderName === "") {
-    setStatus("Error: Folder name is empty");
-    return;
-  }
   setLoading(true);
   setStatus("Deleting...");
   fetch("https://cloud.doctorpok.io/api/folder/delete", {
@@ -29,7 +20,6 @@ const handlDeleteFolder = (
       username: cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1],
       token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
       path: path,
-      folderName: folderName,
     }),
   })
     .then((res) => res.json())
@@ -40,7 +30,7 @@ const handlDeleteFolder = (
       } else {
         setStatus("Success: " + "Folder deleted!");
         setLoading(false);
-        setNewPath(path);
+        setNewPath(path.split("/").slice(0, -1).join("/"));
       }
     });
 };
