@@ -44,8 +44,8 @@
     .folder__delete {
       width: 230px;
       min-height: 40px;
-      box-shadow: 0 0 0 1px var(--grey2);
-      border-radius: 5px;
+      background-color: var(--grey3);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -67,7 +67,7 @@
     }
 
     .folder:hover {
-      background-color: var(--grey3);
+      background-color: var(--grey2);
     }
 
     .folder__bis:hover {
@@ -79,10 +79,10 @@
     }
 
     .field {
-      width: 200px;
+      width: 230px;
       height: 200px;
-      box-shadow: 0 0 0 1px var(--grey2);
-      border-radius: 5px;
+      background-color: var(--grey3);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -94,7 +94,7 @@
       .field__value {
         position: absolute;
         left: 0;
-        bottom: 0;
+        top: 0;
         width: 100%;
         height: 40px;
         display: flex;
@@ -104,7 +104,11 @@
       }
 
       .field__icon {
-        margin-bottom: 40px;
+        width: 90%;
+        padding: 0.4em 0em;
+        border-radius: 8px;
+        background-color: var(--white-darker);
+        margin-top: 0.1em;
         font-size: 5rem;
         font-weight: 1;
         color: var(--blue);
@@ -113,13 +117,19 @@
       .field__name {
         font-size: 80%;
         font-weight: 1;
+        margin-bottom: 1.3em;
       }
     }
+
+    .field__date {
+      position: absolute;
+      bottom: -0.8em;
+      font-size: 70%;
+      font-weight: 1;
+    }
+
     .field:hover {
-      .field__value {
-        background-color: var(--grey2);
-        border-radius: 0 0 5px 5px;
-      }
+      background-color: var(--grey2);
     }
   }
 }

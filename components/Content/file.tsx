@@ -1,10 +1,9 @@
 import { useState } from "react";
-import styles from "./style.module.scss";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import setGoondIcon from "./setGoodIcon";
 import { Menu } from "../../components";
-import { Part } from "../../types";
+
+import styles from "./style.module.scss";
 
 interface FileProps {
   item: any;
@@ -31,16 +30,24 @@ const DisplayFile = ({
       onClick={() => {
         setMenu(!menu);
       }}
+      onMouseLeave={() => {
+        setMenu(false);
+      }}
     >
-      <FontAwesomeIcon
-        icon={setGoondIcon(item) as any}
-        className={styles.field__icon}
-      />
       <div className={styles.field__value}>
         <p className={styles.field__name}>
           {item.filename.length > 20
             ? item.filename.slice(0, 20) + "..."
             : item.filename}
+        </p>
+      </div>
+      <FontAwesomeIcon
+        icon={setGoondIcon(item) as any}
+        className={styles.field__icon}
+      />
+      <div className={styles.field__date}>
+        <p className={styles.field__date__text}>
+          {item.longname.split(" ")[17] + " " + item.longname.split(" ")[19] + " " + item.longname.split(" ")[21]}
         </p>
       </div>
       {menu && (
