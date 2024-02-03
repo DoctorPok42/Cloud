@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "ssh2";
 
+const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+
 export default async function uploadFile(
   req: NextApiRequest,
   res: NextApiResponse
@@ -30,8 +32,8 @@ export default async function uploadFile(
           const fileName = fileDataArray[i].name;
           sftp.writeFile(
             path != null
-              ? `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${path}/${fileName}`
-              : `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${username}/${fileName}`,
+              ? `${PATH}/${path}/${fileName}`
+              : `${PATH}/${username}/${fileName}`,
             fileContents,
             function (err: any) {
               if (err) {
@@ -51,8 +53,8 @@ export default async function uploadFile(
       res.status(500).json({ error: "Something went wrong" });
     })
     .connect({
-      host: process.env.SFTP_URL,
-      port: process.env.SFTP_PORT as unknown as number,
+      host: SFTP_URL,
+      port: SFTP_PORT as unknown as number,
       username: username,
       password: token,
     });

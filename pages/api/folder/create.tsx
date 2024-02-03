@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "ssh2";
 import { verify_token } from "../functions";
 
+const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+
 export default function createFolder(
   req: NextApiRequest,
   res: NextApiResponse
@@ -35,7 +37,7 @@ export default function createFolder(
         if (!uniqueFolder) {
           for (let i = 0; i < folderName.split("/").length; i++) {
             sftp.mkdir(
-              `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${path}/${lastPath}`,
+              `${PATH}/${path}/${lastPath}`,
               function (err: any) {
                 if (err) {
                   res.status(500).json({ error: "Something went wrong" });
@@ -49,6 +51,20 @@ export default function createFolder(
               );
               lastPath += `/${folderName.split("/")[i + 1]}/`;
           }
+        } else {
+          sftp.mkdir(
+            `${PATH}/${path}/${folderName}`,
+            function (err: any) {
+              if (err) {
+                res.status(500).json({ error: "Something went wrong" });
+                conn.end();
+                return;
+              } else {
+                res.status(200).json({ data: "Folder created" });
+              }
+              conn.end();
+            }
+          );
         }
       });
     })
@@ -56,8 +72,8 @@ export default function createFolder(
       res.status(500).json({ error: "Something went wrong" });
     })
     .connect({
-      host: process.env.SFTP_URL,
-      port: process.env.SFTP_PORT as unknown as number,
+      host: SFTP_URL,
+      port: SFTP_PORT as unknown as number,
       username: username,
       password: verified,
     });

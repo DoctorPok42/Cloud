@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "ssh2";
 import { verify_token } from "../functions";
 
+const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -22,7 +24,7 @@ export default async function handler(
       conn.sftp(function (err: any, sftp: any) {
         if (err) throw err;
         sftp.readFile(
-          `/srv/dev-disk-by-uuid-1e9d8d56-b293-4139-8bbc-861a333dd9ed/${path}/${id}`,
+          `${PATH}/${path}/${id}`,
           function (err: any, data: any) {
             if (err) {
               res.status(500).json({ error: "Something went wrong" });
@@ -44,8 +46,8 @@ export default async function handler(
       }
     })
     .connect({
-      host: process.env.SFTP_URL,
-      port: process.env.SFTP_PORT as unknown as number,
+      host: SFTP_URL,
+      port: SFTP_PORT as unknown as number,
       username: username,
       password: verified,
     });
