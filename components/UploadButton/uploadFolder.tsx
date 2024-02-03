@@ -17,7 +17,7 @@ const uploadFolder = async ({
   if (folderName === null) return;
   setLoading(true);
   setStatus("Creating folder...");
-  const res = await fetch("https://cloud.doctorpok.io/api/folder/create", {
+  const res = await fetch("/api/folder/create", {
     method: "POST",
     headers: {
       "Content-Type": "multipart/form-data",

@@ -60,7 +60,7 @@ const UploadButton = ({
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
-            onClick={(e) => {
+            onClick={() => {
               uploadFile(action.path, {
                 cookies,
                 setStatus,

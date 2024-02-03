@@ -53,7 +53,7 @@ const uploadFile = async (
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    const res = await fetch("https://cloud.doctorpok.io/api/upload", {
+    const res = await fetch("/api/upload", {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",

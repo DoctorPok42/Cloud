@@ -11,7 +11,7 @@ const handlDeleteFolder = (
 ) => {
   setLoading(true);
   setStatus("Deleting...");
-  fetch("https://cloud.doctorpok.io/api/folder/delete", {
+  fetch("/api/folder/delete", {
     method: "POST",
     headers: {
       "Content-Type": "multipart/form-data",
