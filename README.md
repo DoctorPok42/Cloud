@@ -4,6 +4,18 @@
 
 # NAS CLOUD
 
+## Description
+
+This project is a simple cloud that allows you to upload files to a remote server using SFTP. It is built with Next.js and TypeScript. It uses the SSH2 library to connect to the server and upload the files. The project is still in development and will be updated regularly.
+
+## Features
+
+- [x] Upload files to a remote server
+- [x] Download files from a remote server
+- [x] Delete files from a remote server
+- [x] Create directories on a remote server
+- [x] Delete directories from a remote server
+
 ## Requirements
 
 1. Node JS 12.16.1 or higher
@@ -27,18 +39,13 @@ git clone git@github.com:DoctorPok42/cloud.git
 npm install
 ```
 
-3. Add .env file
+3. Change the `.env.example` file name to `.env` and fill the values with your own. The `.env` file should look like this:
 
 ```bash
-touch .env
-```
-
-4. Add the following variables to the .env file
-
-```bash
-SFTP_URL="YOUR_URL"
-SFTP_PORT=YOUR_PORT
-ENCODED_KEY="YOUR_ENCODED_KEY"
+SFTP_URL="" # "192.168.1.1"
+SFTP_PORT= # 22
+ENCODED_KEY="" # "goodkey"
+PATH= # "/path/to/remote/directory"
 ```
 
 5. Run the project
