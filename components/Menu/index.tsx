@@ -9,6 +9,7 @@ interface MenuProps {
   path: string;
   setUpdate: (update: boolean) => void;
   setLoading: (loading: boolean) => void;
+  downloadFile: string | null;
 }
 
 const Menu = ({
@@ -20,6 +21,7 @@ const Menu = ({
   path,
   setUpdate,
   setLoading,
+  downloadFile,
 }: MenuProps) => {
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
   const token = cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1];

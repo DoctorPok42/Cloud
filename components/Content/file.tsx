@@ -12,6 +12,9 @@ interface FileProps {
   path: string;
   setUpdate: (update: boolean) => void;
   setLoading: (loading: boolean) => void;
+  handleContextMenu: (e: any) => void;
+  setFieldSelected: (field: string) => void;
+  downloadFile: string | null;
 }
 
 const DisplayFile = ({
@@ -21,17 +24,18 @@ const DisplayFile = ({
   path,
   setUpdate,
   setLoading,
+  handleContextMenu,
+  setFieldSelected,
+  downloadFile,
 }: FileProps) => {
   const [menu, setMenu] = useState<boolean>(false);
   return (
     <div
       key={item.filename}
       className={styles.field}
-      onClick={() => {
-        setMenu(!menu);
-      }}
-      onMouseLeave={() => {
-        setMenu(false);
+      onContextMenu={(e) => {
+        handleContextMenu(e);
+        setFieldSelected(item.filename);
       }}
     >
       <div className={styles.field__value}>
@@ -60,6 +64,7 @@ const DisplayFile = ({
           path={path}
           setUpdate={setUpdate}
           setLoading={setLoading}
+          downloadFile={downloadFile}
         />
       )}
     </div>

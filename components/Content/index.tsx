@@ -9,6 +9,7 @@ import AlertDialog from "../AlertDialog";
 import Header from "../Header";
 
 import styles from "./style.module.scss";
+import ContextMenu from "../ContextMenu";
 
 interface ContentProps {
   data: any;
@@ -19,6 +20,13 @@ interface ContentProps {
   setNewPath: (newPath: string) => void;
   setLoading: (loading: boolean) => void;
   setUpdate: (update: boolean) => void;
+}
+
+const initialContextMenu = {
+  isOpen: false,
+  x: 0,
+  y: 0,
+  e: null,
 }
 
 const Content = ({
@@ -33,6 +41,30 @@ const Content = ({
 }: ContentProps) => {
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
+  const [contextMenu, setContextMenu] = useState(initialContextMenu)
+  const [fieldSelected, setFieldSelected] = useState<string | null>(null)
+  const [fileToDownload, setFileToDownload] = useState<string | null>(null)
+
+  const handleContextMenu = (e: any) => {
+    e.preventDefault()
+
+    const { pageX, pageY } = e
+
+    let x = pageX - 170
+    let y = pageY - 15
+
+    if (window.innerWidth - pageX < 200) x = pageX - 200
+    if (window.innerHeight - pageY < 270) y = pageY - 220
+
+    setContextMenu({
+      isOpen: true,
+      x,
+      y,
+      e,
+    })
+  }
+
+  const closeContextMenu = () => setContextMenu(initialContextMenu)
 
   const isRacine = () => {
     if (newPath === username || newPath === username + "/") {
@@ -81,6 +113,28 @@ const Content = ({
     setNewPath(relativePath);
   }
 
+  const handleContextMenuAction = (action: string) => {
+    switch (action) {
+      case "infos":
+        break;
+      case "download":
+        setFileToDownload(fieldSelected);
+        break;
+      case "rename":
+        break;
+      case "copy":
+        break;
+      case "move":
+        break;
+      case "pin":
+        break;
+      case "delete":
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <div className={styles.contentContainer}>
       <div className={styles.content}>
@@ -105,6 +159,16 @@ const Content = ({
             {status}
           </Alert>
         </Snackbar>}
+
+        {contextMenu.isOpen &&
+          <ContextMenu
+            {...contextMenu}
+            closeContextMenu={closeContextMenu}
+            file={data.find((item: any) => item.filename === fieldSelected)}
+            handleContextMenuAction={handleContextMenuAction}
+          />
+        }
+
         {data !== null && <div className={styles.lists}>
           {!isRacine() && (
             <>
@@ -161,6 +225,9 @@ const Content = ({
                   path={newPath}
                   setUpdate={setUpdate}
                   setLoading={setLoading}
+                  handleContextMenu={handleContextMenu}
+                  setFieldSelected={setFieldSelected}
+                  downloadFile={fileToDownload}
                 />
               );
             }
