@@ -7,9 +7,10 @@ import { Alert, Snackbar } from "@mui/material";
 import UploadButton from "../UploadButton";
 import AlertDialog from "../AlertDialog";
 import Header from "../Header";
+import ContextMenu from "../ContextMenu";
+import { deleteFile, downloadFile } from "../../utils/files";
 
 import styles from "./style.module.scss";
-import ContextMenu from "../ContextMenu";
 
 interface ContentProps {
   data: any;
@@ -43,7 +44,6 @@ const Content = ({
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
   const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const [fieldSelected, setFieldSelected] = useState<string | null>(null)
-  const [fileToDownload, setFileToDownload] = useState<string | null>(null)
 
   const handleContextMenu = (e: any) => {
     e.preventDefault()
@@ -53,7 +53,7 @@ const Content = ({
     let x = pageX - 170
     let y = pageY - 15
 
-    if (window.innerWidth - pageX < 200) x = pageX - 200
+    if (window.innerWidth - pageX < 220) x = pageX - 230
     if (window.innerHeight - pageY < 270) y = pageY - 220
 
     setContextMenu({
@@ -65,6 +65,18 @@ const Content = ({
   }
 
   const closeContextMenu = () => setContextMenu(initialContextMenu)
+
+  const setGoogPath = () => {
+    switch (newPath) {
+      case "my_drive":
+        return null;
+      case "shared_drive":
+      case "music":
+        return "Musique";
+      default:
+        return newPath;
+    }
+  };
 
   const isRacine = () => {
     if (newPath === username || newPath === username + "/") {
@@ -114,11 +126,19 @@ const Content = ({
   }
 
   const handleContextMenuAction = (action: string) => {
+    console.log(action)
     switch (action) {
       case "infos":
         break;
       case "download":
-        setFileToDownload(fieldSelected);
+        downloadFile(
+          fieldSelected as string,
+          setLoading,
+          setStatus,
+          setGoogPath,
+          username,
+          cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]
+        )
         break;
       case "rename":
         break;
@@ -129,6 +149,15 @@ const Content = ({
       case "pin":
         break;
       case "delete":
+        deleteFile(
+          fieldSelected as string,
+          setLoading,
+          setStatus,
+          setUpdate,
+          setGoogPath,
+          username,
+          cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]
+        )
         break;
       default:
         break;
@@ -227,7 +256,6 @@ const Content = ({
                   setLoading={setLoading}
                   handleContextMenu={handleContextMenu}
                   setFieldSelected={setFieldSelected}
-                  downloadFile={fileToDownload}
                 />
               );
             }

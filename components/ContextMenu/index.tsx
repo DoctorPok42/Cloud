@@ -33,15 +33,14 @@ const ContextMenu = ({
   const ref = useClickAway(() => {
     closeContextMenu();
   }) as React.MutableRefObject<HTMLDivElement>;
-  const [showPicker, setShowPicker] = useState(false);
 
   const menuButtons = [
-    { name: "Infos", value: "infos", icon: faInfoCircle },
+    // { name: "Infos", value: "infos", icon: faInfoCircle },
     { name: "Download", value: "download", icon: faDownload },
-    { name: "Rename", value: "rename", icon: faPen },
-    { name: "Copy", value: "copy", icon: faCopy },
-    { name: "Move", value: "move", icon: faArrowCircleRight },
-    { name: "Pin", value: "pin", icon: faThumbTack },
+    // { name: "Rename", value: "rename", icon: faPen },
+    // { name: "Copy", value: "copy", icon: faCopy },
+    // { name: "Move", value: "move", icon: faArrowCircleRight },
+    // { name: "Pin", value: "pin", icon: faThumbTack },
     { name: "Delete", value: "delete", icon: faTrash, color: true }
   ]
 

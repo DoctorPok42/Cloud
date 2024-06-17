@@ -14,7 +14,6 @@ interface FileProps {
   setLoading: (loading: boolean) => void;
   handleContextMenu: (e: any) => void;
   setFieldSelected: (field: string) => void;
-  downloadFile: string | null;
 }
 
 const DisplayFile = ({
@@ -26,9 +25,9 @@ const DisplayFile = ({
   setLoading,
   handleContextMenu,
   setFieldSelected,
-  downloadFile,
 }: FileProps) => {
   const [menu, setMenu] = useState<boolean>(false);
+
   return (
     <div
       key={item.filename}
@@ -64,7 +63,6 @@ const DisplayFile = ({
           path={path}
           setUpdate={setUpdate}
           setLoading={setLoading}
-          downloadFile={downloadFile}
         />
       )}
     </div>
