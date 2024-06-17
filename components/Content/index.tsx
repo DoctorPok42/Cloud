@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { RefObject, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
 import DisplayFile from "./file";
@@ -19,6 +19,8 @@ interface ContentProps {
   setNewPath: (newPath: string) => void;
   setLoading: (loading: boolean) => void;
   setUpdate: (update: boolean) => void;
+  onDrop: boolean;
+  mainRef: RefObject<HTMLDivElement>;
 }
 
 const Content = ({
@@ -30,6 +32,8 @@ const Content = ({
   setNewPath,
   setLoading,
   setUpdate,
+  onDrop,
+  mainRef,
 }: ContentProps) => {
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
@@ -105,67 +109,86 @@ const Content = ({
             {status}
           </Alert>
         </Snackbar>}
-        {data !== null && <div className={styles.lists}>
-          {!isRacine() && (
-            <>
-              <div
-                className={styles.folder__bis}
-                onClick={() => handleGoBack()}
-              >
-                <FontAwesomeIcon icon={faFolder} />
-                <p className={styles.folder__name}>
-                  ..
-                </p>
-              </div>
 
-              <div
-                className={styles.folder__delete}
-                onClick={() => setAlertOpen(true)}
-              >
-                <FontAwesomeIcon icon={faFolderMinus} />
-                <p className={styles.folder__name}>
-                  Delete This Folder
-                </p>
-              </div>
-            </>
-          )}
-          {data.map((item: any) => {
-            return (
+        {contextMenu.isOpen &&
+          <ContextMenu
+            {...contextMenu}
+            closeContextMenu={closeContextMenu}
+            file={data.find((item: any) => item.filename === fieldSelected)}
+            handleContextMenuAction={handleContextMenuAction}
+          />
+        }
+
+        {data !== null &&
+          <div ref={mainRef} className={styles.lists} style={{
+            backgroundColor: onDrop ? "var(--blue3)" : "",
+            boxShadow: onDrop ? "0 0 0 2px var(--blue)" : ""
+          }}>
+            {!isRacine() && (
               <>
-                {item.longname[0] === "d" && (
-                  <div
-                    key={item.filename}
-                    className={styles.folder}
-                    onClick={() => {
-                      setNewPath(newPath + "/" + item.filename);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faFolder} color="var(--blue)" />
-                    <p className={styles.folder__name}>
-                      {item.filename.length > 20
-                        ? item.filename.slice(0, 20) + "..."
-                        : item.filename}
-                    </p>
-                  </div>
-                )}
+                <div
+                  className={styles.folder__bis}
+                  onClick={() => handleGoBack()}
+                >
+                  <FontAwesomeIcon icon={faFolder} />
+                  <p className={styles.folder__name}>
+                    ..
+                  </p>
+                </div>
+
+                <div
+                  className={styles.folder__delete}
+                  onClick={() => setAlertOpen("folder")}
+                >
+                  <FontAwesomeIcon icon={faFolderMinus} />
+                  <p className={styles.folder__name}>
+                    Delete This Folder
+                  </p>
+                </div>
               </>
-            );
-          })}
-          {data.map((item: any) => {
-            if (item.longname[0] == "-") {
+            )}
+            {data.map((item: any) => {
               return (
-                <DisplayFile
-                  item={item}
-                  setStatus={setStatus}
-                  cookies={cookies}
-                  path={newPath}
-                  setUpdate={setUpdate}
-                  setLoading={setLoading}
-                />
+                <>
+                  {item.longname[0] === "d" && (
+                    <div
+                      key={item.filename}
+                      className={styles.folder}
+                      onClick={(e) => {
+                        if (e.detail === 2)
+                          setNewPath(newPath + "/" + item.filename);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faFolder} color="var(--blue)" />
+                      <p className={styles.folder__name}>
+                        {item.filename.length > 20
+                          ? item.filename.slice(0, 20) + "..."
+                          : item.filename}
+                      </p>
+                    </div>
+                  )}
+                </>
               );
-            }
-          })}
-        </div>}
+            })}
+            {data.map((item: any) => {
+              if (item.longname[0] == "-") {
+                return (
+                  <DisplayFile
+                    item={item}
+                    setStatus={setStatus}
+                    cookies={cookies}
+                    path={newPath}
+                    setUpdate={setUpdate}
+                    setLoading={setLoading}
+                    handleContextMenu={handleContextMenu}
+                    setFieldSelected={setFieldSelected}
+                  />
+                );
+              }
+            })}
+          </div>
+        }
+
         <UploadButton
           cookies={cookies}
           setStatus={setStatus}

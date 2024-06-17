@@ -32,11 +32,13 @@
       margin-top: 0.5em;
       width: 100%;
       height: calc(100% - 3.8em);
+      border-radius: 8px;
       display: flex;
       flex-wrap: wrap;
       align-items: flex-start;
       justify-content: flex-start;
       overflow-y: auto;
+      transition: all 0.2s ease-in-out;
     }
 
     .folder,
