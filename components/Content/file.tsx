@@ -12,6 +12,8 @@ interface FileProps {
   path: string;
   setUpdate: (update: boolean) => void;
   setLoading: (loading: boolean) => void;
+  handleContextMenu: (e: any) => void;
+  setFieldSelected: (field: string) => void;
 }
 
 const DisplayFile = ({
@@ -21,17 +23,18 @@ const DisplayFile = ({
   path,
   setUpdate,
   setLoading,
+  handleContextMenu,
+  setFieldSelected,
 }: FileProps) => {
   const [menu, setMenu] = useState<boolean>(false);
+
   return (
     <div
       key={item.filename}
       className={styles.field}
-      onClick={() => {
-        setMenu(!menu);
-      }}
-      onMouseLeave={() => {
-        setMenu(false);
+      onContextMenu={(e) => {
+        handleContextMenu(e);
+        setFieldSelected(item.filename);
       }}
     >
       <div className={styles.field__value}>

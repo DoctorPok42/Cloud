@@ -7,6 +7,8 @@ import { Alert, Snackbar } from "@mui/material";
 import UploadButton from "../UploadButton";
 import AlertDialog from "../AlertDialog";
 import Header from "../Header";
+import ContextMenu from "../ContextMenu";
+import { deleteFile, downloadFile } from "../../utils/files";
 
 import styles from "./style.module.scss";
 
@@ -23,6 +25,13 @@ interface ContentProps {
   mainRef: RefObject<HTMLDivElement>;
 }
 
+const initialContextMenu = {
+  isOpen: false,
+  x: 0,
+  y: 0,
+  e: null,
+}
+
 const Content = ({
   data,
   cookies,
@@ -35,8 +44,43 @@ const Content = ({
   onDrop,
   mainRef,
 }: ContentProps) => {
-  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [alertOpen, setAlertOpen] = useState<"file" | "folder" | null>(null);
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
+  const [contextMenu, setContextMenu] = useState(initialContextMenu)
+  const [fieldSelected, setFieldSelected] = useState<string | null>(null)
+
+  const handleContextMenu = (e: any) => {
+    e.preventDefault()
+
+    const { pageX, pageY } = e
+
+    let x = pageX - 170
+    let y = pageY - 15
+
+    if (window.innerWidth - pageX < 220) x = pageX - 230
+    if (window.innerHeight - pageY < 270) y = pageY - 220
+
+    setContextMenu({
+      isOpen: true,
+      x,
+      y,
+      e,
+    })
+  }
+
+  const closeContextMenu = () => setContextMenu(initialContextMenu)
+
+  const setGoogPath = () => {
+    switch (newPath) {
+      case "my_drive":
+        return null;
+      case "shared_drive":
+      case "music":
+        return "Musique";
+      default:
+        return newPath;
+    }
+  };
 
   const isRacine = () => {
     if (newPath === username || newPath === username + "/") {
@@ -65,7 +109,7 @@ const Content = ({
   };
 
   const handleConfirm = () => {
-    setAlertOpen(false);
+    setAlertOpen(null);
     handlDeleteFolder(
       newPath,
       {
@@ -77,6 +121,19 @@ const Content = ({
     )
   }
 
+  const handleDeleteFile = () => {
+    deleteFile(
+      fieldSelected as string,
+      setLoading,
+      setStatus,
+      setUpdate,
+      setGoogPath,
+      username,
+      cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]
+    )
+    handleConfirm()
+  }
+
   const handleGoBack = () => {
     let relativePath = newPath.split("/").slice(0, -1).join("/");
     if (relativePath === "/") {
@@ -85,16 +142,51 @@ const Content = ({
     setNewPath(relativePath);
   }
 
+  const handleContextMenuAction = (action: string) => {
+    console.log(action)
+    switch (action) {
+      case "infos":
+        break;
+      case "download":
+        downloadFile(
+          fieldSelected as string,
+          setLoading,
+          setStatus,
+          setGoogPath,
+          username,
+          cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]
+        )
+        break;
+      case "rename":
+        break;
+      case "copy":
+        break;
+      case "move":
+        break;
+      case "pin":
+        break;
+      case "delete":
+        setAlertOpen("file")
+        break;
+      default:
+        break;
+    }
+  }
+
   return (
     <div className={styles.contentContainer}>
       <div className={styles.content}>
-      {alertOpen && <AlertDialog
-        title="Are you sure you want to delete this folder?"
-        content="This action cannot be undone. This will permanently delete your folder and remove your data from the server."
-        onClose={() => setAlertOpen(false)}
-        onConfirm={() => handleConfirm()}
-        />}
+        {alertOpen &&
+          <AlertDialog
+            title={`Are you sure you want to delete this ${alertOpen}?`}
+            content={`This action cannot be undone. This will permanently delete your ${alertOpen} and remove your data from the server.`}
+            onClose={() => setAlertOpen(null)}
+            onConfirm={() => alertOpen === "folder" ? handleConfirm() : handleDeleteFile()}
+          />
+        }
+
         <Header cookies={cookies} path={newPath} setPath={setNewPath} />
+
         {status !== "" && <Snackbar
           open={true}
           className={styles.alert}
