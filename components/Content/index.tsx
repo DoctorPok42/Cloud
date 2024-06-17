@@ -40,7 +40,7 @@ const Content = ({
   setLoading,
   setUpdate,
 }: ContentProps) => {
-  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [alertOpen, setAlertOpen] = useState<"file" | "folder" | null>(null);
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
   const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const [fieldSelected, setFieldSelected] = useState<string | null>(null)
@@ -105,7 +105,7 @@ const Content = ({
   };
 
   const handleConfirm = () => {
-    setAlertOpen(false);
+    setAlertOpen(null);
     handlDeleteFolder(
       newPath,
       {
@@ -115,6 +115,19 @@ const Content = ({
         setLoading: setLoading,
       }
     )
+  }
+
+  const handleDeleteFile = () => {
+    deleteFile(
+      fieldSelected as string,
+      setLoading,
+      setStatus,
+      setUpdate,
+      setGoogPath,
+      username,
+      cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]
+    )
+    handleConfirm()
   }
 
   const handleGoBack = () => {
@@ -149,15 +162,7 @@ const Content = ({
       case "pin":
         break;
       case "delete":
-        deleteFile(
-          fieldSelected as string,
-          setLoading,
-          setStatus,
-          setUpdate,
-          setGoogPath,
-          username,
-          cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]
-        )
+        setAlertOpen("file")
         break;
       default:
         break;
@@ -167,13 +172,17 @@ const Content = ({
   return (
     <div className={styles.contentContainer}>
       <div className={styles.content}>
-      {alertOpen && <AlertDialog
-        title="Are you sure you want to delete this folder?"
-        content="This action cannot be undone. This will permanently delete your folder and remove your data from the server."
-        onClose={() => setAlertOpen(false)}
-        onConfirm={() => handleConfirm()}
-        />}
+        {alertOpen &&
+          <AlertDialog
+            title={`Are you sure you want to delete this ${alertOpen}?`}
+            content={`This action cannot be undone. This will permanently delete your ${alertOpen} and remove your data from the server.`}
+            onClose={() => setAlertOpen(null)}
+            onConfirm={() => alertOpen === "folder" ? handleConfirm() : handleDeleteFile()}
+          />
+        }
+
         <Header cookies={cookies} path={newPath} setPath={setNewPath} />
+
         {status !== "" && <Snackbar
           open={true}
           className={styles.alert}
@@ -213,7 +222,7 @@ const Content = ({
 
               <div
                 className={styles.folder__delete}
-                onClick={() => setAlertOpen(true)}
+                onClick={() => setAlertOpen("folder")}
               >
                 <FontAwesomeIcon icon={faFolderMinus} />
                 <p className={styles.folder__name}>

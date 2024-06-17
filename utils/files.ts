@@ -84,8 +84,6 @@ export const deleteFile = async (
   username: string | undefined,
   token: string | undefined
 ) => {
-  const approb = confirm("Are you sure you want to delete this file ?");
-  if (!approb) return;
   setLoading(true);
   setStatus("Deleting...");
 
