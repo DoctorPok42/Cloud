@@ -1,0 +1,60 @@
+.ContextMenu_container {
+  position: absolute;
+  width: 10em;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  gap: 0.2em;
+  z-index: 3;
+  animation: display 0.2s ease-in-out;
+
+  .ContextMenu_content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    .ContextMenu_button {
+      padding: 0.5em;
+      color: var(--white-dark);
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.1s ease-in-out;
+
+      p {
+        margin: 0;
+      }
+
+      &#ContextMenu_button_red {
+        color: var(--red);
+      }
+
+      &:hover:not(#ContextMenu_button_red) {
+        color: var(--white);
+        background-color: var(--blue) !important;
+      }
+
+      &:hover#ContextMenu_button_red {
+        color: var(--white);
+        background-color: var(--red);
+      }
+    }
+  }
+}
+
+@keyframes display {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
