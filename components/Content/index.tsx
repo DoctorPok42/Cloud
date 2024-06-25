@@ -4,10 +4,7 @@ import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
 import DisplayFile from "./file";
 import handlDeleteFolder from "./deleteFolder";
 import { Alert, Snackbar } from "@mui/material";
-import UploadButton from "../UploadButton";
-import AlertDialog from "../AlertDialog";
-import Header from "../Header";
-import ContextMenu from "../ContextMenu";
+import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup } from "../index";
 import { deleteFile, downloadFile } from "../../utils/files";
 
 import styles from "./style.module.scss";
@@ -48,6 +45,7 @@ const Content = ({
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
   const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const [fieldSelected, setFieldSelected] = useState<string | null>(null)
+  const [folderHovered, setFolderHovered] = useState<string | null>(null)
 
   const handleContextMenu = (e: any) => {
     e.preventDefault()
@@ -216,6 +214,13 @@ const Content = ({
             backgroundColor: onDrop ? "var(--blue3)" : "",
             boxShadow: onDrop ? "0 0 0 2px var(--blue)" : ""
           }}>
+            {onDrop &&
+              <DropPopup
+                folderHovered={folderHovered}
+                path={newPath}
+              />
+            }
+
             {!isRacine() && (
               <>
                 <div
@@ -250,6 +255,8 @@ const Content = ({
                         if (e.detail === 2)
                           setNewPath(newPath + "/" + item.filename);
                       }}
+                      onDragEnter={() => setFolderHovered(item.filename)}
+                      onDragLeave={() => setFolderHovered(null)}
                     >
                       <FontAwesomeIcon icon={faFolder} color="var(--blue)" />
                       <p className={styles.folder__name}>

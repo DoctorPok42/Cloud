@@ -66,7 +66,7 @@ export default function Home({ cookies }: HomeProps) {
       mainRef.current?.removeEventListener("dragover", onDragOver)
       mainRef.current?.removeEventListener("dragleave", onDragLeave)
     }
-  }, [mainRef])
+  }, [])
 
   return (
     <>
