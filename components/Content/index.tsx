@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React, { RefObject, useCallback, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
 import DisplayFile from "./file";
 import handlDeleteFolder from "./deleteFolder";
 import { Alert, Snackbar } from "@mui/material";
-import UploadButton from "../UploadButton";
-import AlertDialog from "../AlertDialog";
-import Header from "../Header";
-import ContextMenu from "../ContextMenu";
+import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup } from "../index";
 import { deleteFile, downloadFile } from "../../utils/files";
 
 import styles from "./style.module.scss";
+import { useDropzone } from "react-dropzone";
 
 interface ContentProps {
   data: any;
@@ -21,6 +19,8 @@ interface ContentProps {
   setNewPath: (newPath: string) => void;
   setLoading: (loading: boolean) => void;
   setUpdate: (update: boolean) => void;
+  onDroped: boolean;
+  mainRef: RefObject<HTMLDivElement>;
 }
 
 const initialContextMenu = {
@@ -39,11 +39,15 @@ const Content = ({
   setNewPath,
   setLoading,
   setUpdate,
+  onDroped,
+  mainRef,
 }: ContentProps) => {
   const [alertOpen, setAlertOpen] = useState<"file" | "folder" | null>(null);
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
   const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const [fieldSelected, setFieldSelected] = useState<string | null>(null)
+  const [folderHovered, setFolderHovered] = useState<string | null>(null)
+  const [files, setFiles] = useState<File[]>([]);
 
   const handleContextMenu = (e: any) => {
     e.preventDefault()
@@ -169,6 +173,48 @@ const Content = ({
     }
   }
 
+  const handleAddFiles = async (e: File[]) => {
+    setStatus("Uploading...")
+    for (var i = 0; i < e.length; i++) {
+      const file = e[i]
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = async () => {
+        setStatus(`Uploading ${file.name.slice(0, 20)} ...`)
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: JSON.stringify({
+            username: cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1],
+            token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
+            path: newPath,
+            fileDataArray: [{
+              data: reader.result,
+              name: file.name,
+            }],
+          })
+        })
+
+        const data = await response.json();
+
+        if (data.error) {
+          setStatus("Error: " + data.error);
+          setLoading(false);
+        } else {
+          setStatus("Success: File uploaded!");
+          setLoading(false);
+          setUpdate(true);
+        }
+      }
+    }
+  }
+
+  const onDrop = useCallback((acceptedFiles: File[]) => handleAddFiles(acceptedFiles), []);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
   return (
     <div className={styles.contentContainer}>
       <div className={styles.content}>
@@ -207,69 +253,97 @@ const Content = ({
           />
         }
 
-        {data !== null && <div className={styles.lists}>
-          {!isRacine() && (
-            <>
-              <div
-                className={styles.folder__bis}
-                onClick={() => handleGoBack()}
-              >
-                <FontAwesomeIcon icon={faFolder} />
-                <p className={styles.folder__name}>
-                  ..
-                </p>
-              </div>
+        {data !== null &&
+          <div
+            {...getRootProps()}
+            ref={mainRef}
+            className={styles.lists}
+            style={{
+              backgroundColor: onDroped ? "var(--blue3)" : "",
+              boxShadow: onDroped ? "0 0 0 2px var(--blue)" : "",
+              zIndex: onDroped ? 1000 : 0,
+            }}
+          >
+            {onDroped && <input {...getInputProps()} />}
 
-              <div
-                className={styles.folder__delete}
-                onClick={() => setAlertOpen("folder")}
-              >
-                <FontAwesomeIcon icon={faFolderMinus} />
-                <p className={styles.folder__name}>
-                  Delete This Folder
-                </p>
-              </div>
-            </>
-          )}
-          {data.map((item: any) => {
-            return (
-              <>
-                {item.longname[0] === "d" && (
-                  <div
-                    key={item.filename}
-                    className={styles.folder}
-                    onClick={() => {
-                      setNewPath(newPath + "/" + item.filename);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faFolder} color="var(--blue)" />
-                    <p className={styles.folder__name}>
-                      {item.filename.length > 20
-                        ? item.filename.slice(0, 20) + "..."
-                        : item.filename}
-                    </p>
-                  </div>
-                )}
-              </>
-            );
-          })}
-          {data.map((item: any) => {
-            if (item.longname[0] == "-") {
-              return (
-                <DisplayFile
-                  item={item}
-                  setStatus={setStatus}
-                  cookies={cookies}
-                  path={newPath}
-                  setUpdate={setUpdate}
-                  setLoading={setLoading}
-                  handleContextMenu={handleContextMenu}
-                  setFieldSelected={setFieldSelected}
-                />
-              );
+            {onDroped &&
+              <DropPopup
+                folderHovered={folderHovered}
+                path={newPath}
+              />
             }
-          })}
-        </div>}
+
+            {!isRacine() && (
+              <>
+                <div
+                  className={styles.folder__bis}
+                  onClick={() => handleGoBack()}
+                >
+                  <FontAwesomeIcon icon={faFolder} />
+                  <p className={styles.folder__name}>
+                    ..
+                  </p>
+                </div>
+
+                <div
+                  className={styles.folder__delete}
+                  onClick={() => setAlertOpen("folder")}
+                >
+                  <FontAwesomeIcon icon={faFolderMinus} />
+                  <p className={styles.folder__name}>
+                    Delete This Folder
+                  </p>
+                </div>
+              </>
+            )}
+            {data.map((item: any) => {
+              return (
+                <>
+                  {item.longname[0] === "d" && (
+                    <div
+                      key={item.filename}
+                      className={styles.folder}
+                      onClick={(e) => {
+                        if (e.detail === 2)
+                          setNewPath(newPath + "/" + item.filename);
+                      }}
+                      onDragEnter={() => setFolderHovered(item.filename)}
+                      onDragLeave={() => setFolderHovered(null)}
+                    >
+                      <FontAwesomeIcon icon={faFolder} color="var(--blue)" />
+                      <p className={styles.folder__name}>
+                        {item.filename.length > 20
+                          ? item.filename.slice(0, 20) + "..."
+                          : item.filename}
+                      </p>
+                    </div>
+                  )}
+                </>
+              );
+            })}
+            {data.map((item: any) => {
+              if (item.longname[0] == "-") {
+                return (
+                  <div style={{
+                    zIndex: !onDrop ? 1000000 : 1000,
+                  }}>
+                    <DisplayFile
+                        item={item}
+                        setStatus={setStatus}
+                        cookies={cookies}
+                        path={newPath}
+                        setUpdate={setUpdate}
+                        setLoading={setLoading}
+                        handleContextMenu={handleContextMenu}
+                        setFieldSelected={setFieldSelected}
+                    />
+                  </div>
+                );
+              }
+            })}
+          </div>
+        }
+
         <UploadButton
           cookies={cookies}
           setStatus={setStatus}

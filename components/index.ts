@@ -2,6 +2,8 @@ export { default as AlertDialog } from "./AlertDialog";
 export { default as AvatarIcon } from "./AvatarIcon";
 export { default as BreadCrumbs } from "./BreadCrumbs";
 export { default as Content } from "./Content";
+export { default as ContextMenu } from "./ContextMenu";
+export { default as DropPopup } from "./DropPopup";
 export { default as Header } from "./Header";
 export { default as Menu } from "./Menu";
 export { default as Sidebar } from "./Sidebar";

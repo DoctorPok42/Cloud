@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Sidebar,
   Content,
@@ -19,6 +19,9 @@ export default function Home({ cookies }: HomeProps) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [update, setUpdate] = useState<boolean>(false);
+  const [onDrop, setOnDrop] = useState<boolean>(false)
+
+  const mainRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setLoading(true);
@@ -45,11 +48,32 @@ export default function Home({ cookies }: HomeProps) {
       });
   }, [newPath, update]);
 
+  useEffect(() => {
+    const onDragOver = (e: DragEvent) => {
+      e.preventDefault()
+      setOnDrop(true)
+    }
+
+    const onDragLeave = (e: DragEvent) => {
+      e.preventDefault()
+      setOnDrop(false)
+    }
+
+    const onDrop = (e: DragEvent) => {
+      e.preventDefault()
+      setOnDrop(false)
+    }
+
+    mainRef.current?.addEventListener("dragover", onDragOver)
+    mainRef.current?.addEventListener("dragleave", onDragLeave)
+    mainRef.current?.addEventListener("drop", onDrop)
+  }, [])
+
   return (
     <>
       <Head>
         <title>Cloud</title>
-        {/* <link rel="icon" href="/favicon.ico" /> */}
+        <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="Cloud" />
         <meta name="author" content="DoctorPok" />
         <meta name="keywords" content="Cloud" />
@@ -65,6 +89,8 @@ export default function Home({ cookies }: HomeProps) {
           setNewPath={setNewPath}
           setLoading={setLoading}
           setUpdate={setUpdate}
+          onDroped={onDrop}
+          mainRef={mainRef}
         />
       </div>
     </>

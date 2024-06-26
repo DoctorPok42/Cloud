@@ -31,6 +31,7 @@
     "ping": "^0.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "sass": "^1.57.1",
     "ssh2": "^1.11.0",
     "styled-components": "^5.3.6",
