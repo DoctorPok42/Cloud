@@ -59,13 +59,14 @@ export default function Home({ cookies }: HomeProps) {
       setOnDrop(false)
     }
 
+    const onDrop = (e: DragEvent) => {
+      e.preventDefault()
+      setOnDrop(false)
+    }
+
     mainRef.current?.addEventListener("dragover", onDragOver)
     mainRef.current?.addEventListener("dragleave", onDragLeave)
-
-    return () => {
-      mainRef.current?.removeEventListener("dragover", onDragOver)
-      mainRef.current?.removeEventListener("dragleave", onDragLeave)
-    }
+    mainRef.current?.addEventListener("drop", onDrop)
   }, [])
 
   return (
@@ -88,7 +89,7 @@ export default function Home({ cookies }: HomeProps) {
           setNewPath={setNewPath}
           setLoading={setLoading}
           setUpdate={setUpdate}
-          onDrop={onDrop}
+          onDroped={onDrop}
           mainRef={mainRef}
         />
       </div>

@@ -1,7 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Client } from "ssh2";
+import { Client, SFTPWrapper } from "ssh2";
+import { verify_token } from "./functions";
 
 const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb",
+    },
+  },
+}
 
 export default async function uploadFile(
   req: NextApiRequest,
@@ -14,6 +23,8 @@ export default async function uploadFile(
     return res.status(400).json({ error: "Missing parameters" });
   }
 
+  const verified = verify_token(token);
+
   const fileContentsArray = [] as any;
   for (let i = 0; i < fileDataArray.length; i++) {
     const { data } = fileDataArray[i];
@@ -25,7 +36,7 @@ export default async function uploadFile(
   const conn = new Client();
   conn
     .on("ready", function () {
-      conn.sftp(function (err: any, sftp: any) {
+      conn.sftp(function (err: any, sftp: SFTPWrapper) {
         if (err) throw err;
         for (let i = 0; i < fileContentsArray.length; i++) {
           const fileContents = fileContentsArray[i];
@@ -56,6 +67,6 @@ export default async function uploadFile(
       host: SFTP_URL,
       port: SFTP_PORT as unknown as number,
       username: username,
-      password: token,
+      password: verified,
     });
 }

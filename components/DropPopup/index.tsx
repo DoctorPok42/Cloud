@@ -1,8 +1,8 @@
 import React from 'react';
-
-import styles from './style.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudArrowUp, faFolder, faHardDrive } from '@fortawesome/free-solid-svg-icons';
+
+import styles from './style.module.scss';
 
 interface DropPopupProps {
   folderHovered: string | null;

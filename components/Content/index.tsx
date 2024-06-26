@@ -1,4 +1,4 @@
-import React, { RefObject, useState } from "react";
+import React, { RefObject, useCallback, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
 import DisplayFile from "./file";
@@ -8,6 +8,7 @@ import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup } from "../in
 import { deleteFile, downloadFile } from "../../utils/files";
 
 import styles from "./style.module.scss";
+import { useDropzone } from "react-dropzone";
 
 interface ContentProps {
   data: any;
@@ -18,7 +19,7 @@ interface ContentProps {
   setNewPath: (newPath: string) => void;
   setLoading: (loading: boolean) => void;
   setUpdate: (update: boolean) => void;
-  onDrop: boolean;
+  onDroped: boolean;
   mainRef: RefObject<HTMLDivElement>;
 }
 
@@ -38,7 +39,7 @@ const Content = ({
   setNewPath,
   setLoading,
   setUpdate,
-  onDrop,
+  onDroped,
   mainRef,
 }: ContentProps) => {
   const [alertOpen, setAlertOpen] = useState<"file" | "folder" | null>(null);
@@ -46,6 +47,7 @@ const Content = ({
   const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const [fieldSelected, setFieldSelected] = useState<string | null>(null)
   const [folderHovered, setFolderHovered] = useState<string | null>(null)
+  const [files, setFiles] = useState<File[]>([]);
 
   const handleContextMenu = (e: any) => {
     e.preventDefault()
@@ -171,6 +173,48 @@ const Content = ({
     }
   }
 
+  const handleAddFiles = async (e: File[]) => {
+    setStatus("Uploading...")
+    for (var i = 0; i < e.length; i++) {
+      const file = e[i]
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = async () => {
+        setStatus(`Uploading ${file.name.slice(0, 20)} ...`)
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: JSON.stringify({
+            username: cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1],
+            token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
+            path: newPath,
+            fileDataArray: [{
+              data: reader.result,
+              name: file.name,
+            }],
+          })
+        })
+
+        const data = await response.json();
+
+        if (data.error) {
+          setStatus("Error: " + data.error);
+          setLoading(false);
+        } else {
+          setStatus("Success: File uploaded!");
+          setLoading(false);
+          setUpdate(true);
+        }
+      }
+    }
+  }
+
+  const onDrop = useCallback((acceptedFiles: File[]) => handleAddFiles(acceptedFiles), []);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
   return (
     <div className={styles.contentContainer}>
       <div className={styles.content}>
@@ -210,11 +254,19 @@ const Content = ({
         }
 
         {data !== null &&
-          <div ref={mainRef} className={styles.lists} style={{
-            backgroundColor: onDrop ? "var(--blue3)" : "",
-            boxShadow: onDrop ? "0 0 0 2px var(--blue)" : ""
-          }}>
-            {onDrop &&
+          <div
+            {...getRootProps()}
+            ref={mainRef}
+            className={styles.lists}
+            style={{
+              backgroundColor: onDroped ? "var(--blue3)" : "",
+              boxShadow: onDroped ? "0 0 0 2px var(--blue)" : "",
+              zIndex: onDroped ? 1000 : 0,
+            }}
+          >
+            {onDroped && <input {...getInputProps()} />}
+
+            {onDroped &&
               <DropPopup
                 folderHovered={folderHovered}
                 path={newPath}
@@ -272,16 +324,20 @@ const Content = ({
             {data.map((item: any) => {
               if (item.longname[0] == "-") {
                 return (
-                  <DisplayFile
-                    item={item}
-                    setStatus={setStatus}
-                    cookies={cookies}
-                    path={newPath}
-                    setUpdate={setUpdate}
-                    setLoading={setLoading}
-                    handleContextMenu={handleContextMenu}
-                    setFieldSelected={setFieldSelected}
-                  />
+                  <div style={{
+                    zIndex: !onDrop ? 1000000 : 1000,
+                  }}>
+                    <DisplayFile
+                        item={item}
+                        setStatus={setStatus}
+                        cookies={cookies}
+                        path={newPath}
+                        setUpdate={setUpdate}
+                        setLoading={setLoading}
+                        handleContextMenu={handleContextMenu}
+                        setFieldSelected={setFieldSelected}
+                    />
+                  </div>
                 );
               }
             })}

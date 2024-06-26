@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Client } from "ssh2";
+import { Client, SFTPWrapper } from "ssh2";
 import { verify_token } from "./functions";
 
 const { SFTP_URL, SFTP_PORT, PATH } = process.env;
@@ -23,7 +23,7 @@ export default async function getFiles(
   const data = await new Promise((resolve, reject) => {
     conn
       .on("ready", function () {
-        conn.sftp(function (err: any, sftp: any) {
+        conn.sftp(function (err: any, sftp: SFTPWrapper) {
           if (err) throw err;
           sftp.readdir(
             `${PATH}/${newPath}`,

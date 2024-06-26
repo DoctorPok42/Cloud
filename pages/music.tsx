@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Sidebar,
   Content,
@@ -18,6 +18,9 @@ export default function Shared({ cookies }: MusiqueProps) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [update, setUpdate] = useState<boolean>(false);
+  const [onDrop, setOnDrop] = useState<boolean>(false)
+
+  const mainRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setLoading(true);
@@ -44,6 +47,27 @@ export default function Shared({ cookies }: MusiqueProps) {
       });
   }, [newPath, update]);
 
+  useEffect(() => {
+    const onDragOver = (e: DragEvent) => {
+      e.preventDefault()
+      setOnDrop(true)
+    }
+
+    const onDragLeave = (e: DragEvent) => {
+      e.preventDefault()
+      setOnDrop(false)
+    }
+
+    const onDrop = (e: DragEvent) => {
+      e.preventDefault()
+      setOnDrop(false)
+    }
+
+    mainRef.current?.addEventListener("dragover", onDragOver)
+    mainRef.current?.addEventListener("dragleave", onDragLeave)
+    mainRef.current?.addEventListener("drop", onDrop)
+  }, [])
+
   return (
     <>
       <Head>
@@ -64,6 +88,8 @@ export default function Shared({ cookies }: MusiqueProps) {
           setNewPath={setNewPath}
           setLoading={setLoading}
           setUpdate={setUpdate}
+          onDrop={onDrop}
+          mainRef={mainRef}
         />
       </div>
     </>
