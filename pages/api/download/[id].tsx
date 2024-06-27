@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { id } = req.query;
-  const { username, token, path } = JSON.parse(req.body);
+  const { username, token, path } = req.body;
 
   if (!username || !token || !id || !path) {
     return res.status(400).json({ error: "Missing parameters" });
