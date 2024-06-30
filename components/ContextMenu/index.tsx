@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useClickAway } from "@uidotdev/usehooks";
 import {
   faArrowCircleRight,
@@ -35,7 +35,7 @@ const ContextMenu = ({
   }) as React.MutableRefObject<HTMLDivElement>;
 
   const menuButtons = [
-    // { name: "Infos", value: "infos", icon: faInfoCircle },
+    { name: "Infos", value: "infos", icon: faInfoCircle },
     { name: "Download", value: "download", icon: faDownload },
     // { name: "Rename", value: "rename", icon: faPen },
     // { name: "Copy", value: "copy", icon: faCopy },

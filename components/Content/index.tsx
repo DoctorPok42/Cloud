@@ -4,11 +4,11 @@ import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
 import DisplayFile from "./file";
 import handlDeleteFolder from "./deleteFolder";
 import { Alert, Snackbar } from "@mui/material";
-import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup } from "../index";
+import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup, InfosPopup } from "../index";
 import { deleteFile, downloadFile } from "../../utils/files";
+import { useDropzone } from "react-dropzone";
 
 import styles from "./style.module.scss";
-import { useDropzone } from "react-dropzone";
 
 interface ContentProps {
   data: any;
@@ -47,7 +47,7 @@ const Content = ({
   const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const [fieldSelected, setFieldSelected] = useState<string | null>(null)
   const [folderHovered, setFolderHovered] = useState<string | null>(null)
-  const [files, setFiles] = useState<File[]>([]);
+  const [infosFile, setInfosFile] = useState<any>(null)
 
   const handleContextMenu = (e: any) => {
     e.preventDefault()
@@ -143,9 +143,9 @@ const Content = ({
   }
 
   const handleContextMenuAction = (action: string) => {
-    console.log(action)
     switch (action) {
       case "infos":
+        setInfosFile([data.find((item: any) => item.filename === fieldSelected)])
         break;
       case "download":
         downloadFile(
@@ -224,6 +224,13 @@ const Content = ({
             content={`This action cannot be undone. This will permanently delete your ${alertOpen} and remove your data from the server.`}
             onClose={() => setAlertOpen(null)}
             onConfirm={() => alertOpen === "folder" ? handleConfirm() : handleDeleteFile()}
+          />
+        }
+
+        {infosFile &&
+          <InfosPopup
+            infosFile={infosFile}
+            setInfosFile={setInfosFile}
           />
         }
 

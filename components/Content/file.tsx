@@ -33,8 +33,8 @@ const DisplayFile = ({
       key={item.filename}
       className={styles.field}
       onContextMenu={(e) => {
-        handleContextMenu(e);
         setFieldSelected(item.filename);
+        handleContextMenu(e);
       }}
     >
       <div className={styles.field__value}>
