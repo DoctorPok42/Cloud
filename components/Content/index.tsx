@@ -142,6 +142,34 @@ const Content = ({
     setNewPath(relativePath);
   }
 
+  const handleRenameFile = async (filename: string, newFileName: string | null, fileExtension: string) => {
+    if (!newFileName) return;
+
+    setStatus(`Renaming ${filename} to ${newFileName}.${fileExtension}...`)
+
+    const response = await fetch("/api/rename", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
+        filename,
+        newFileName: newFileName + "." + fileExtension,
+        newPath,
+      }),
+    })
+
+    const data = await response.json();
+    if (data.error) {
+      setStatus("Error: " + data.error);
+    } else {
+      setStatus("Success: File renamed!");
+      setUpdate(true);
+    }
+  }
+
   const handleContextMenuAction = (action: string) => {
     switch (action) {
       case "infos":
@@ -158,6 +186,10 @@ const Content = ({
         )
         break;
       case "rename":
+        const file = data.find((item: any) => item.filename === fieldSelected)
+        const newName = prompt("Enter the new name", file.filename.split(".")[0])
+        const fileExtension = file.filename.split(".")[1]
+        handleRenameFile(file.filename, newName, fileExtension)
         break;
       case "copy":
         break;
