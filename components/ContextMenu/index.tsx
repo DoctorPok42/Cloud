@@ -37,7 +37,7 @@ const ContextMenu = ({
   const menuButtons = [
     { name: "Infos", value: "infos", icon: faInfoCircle },
     { name: "Download", value: "download", icon: faDownload },
-    // { name: "Rename", value: "rename", icon: faPen },
+    { name: "Rename", value: "rename", icon: faPen },
     // { name: "Copy", value: "copy", icon: faCopy },
     // { name: "Move", value: "move", icon: faArrowCircleRight },
     // { name: "Pin", value: "pin", icon: faThumbTack },
