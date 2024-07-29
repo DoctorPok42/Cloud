@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Client, SFTPWrapper } from "ssh2";
 import { verify_token } from "./functions";
 
-const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+const { SFTP_URL, SFTP_PORT, SFTP_PATH } = process.env;
 
 export const config = {
   api: {
@@ -43,8 +43,8 @@ export default async function uploadFile(
           const fileName = fileDataArray[i].name;
           sftp.writeFile(
             path != null
-              ? `${PATH}/${path}/${fileName}`
-              : `${PATH}/${username}/${fileName}`,
+              ? `${SFTP_PATH}/${path}/${fileName}`
+              : `${SFTP_PATH}/${username}/${fileName}`,
             fileContents,
             function (err: any) {
               if (err) {

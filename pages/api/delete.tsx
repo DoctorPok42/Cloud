@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Client, SFTPWrapper } from "ssh2";
 import { verify_token } from "./functions";
 
-const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+const { SFTP_URL, SFTP_PORT, SFTP_PATH } = process.env;
 
 export default function deleteFile(req: NextApiRequest, res: NextApiResponse) {
   const { username, token, filename, path } = req.body;
@@ -21,8 +21,8 @@ export default function deleteFile(req: NextApiRequest, res: NextApiResponse) {
         if (err) throw err;
         sftp.unlink(
           path != null
-            ? `${PATH}/${path}/${filename}`
-            : `${PATH}/${username}/${filename}`,
+            ? `${SFTP_PATH}/${path}/${filename}`
+            : `${SFTP_PATH}/${username}/${filename}`,
           function (err: any) {
             if (err) {
               res.status(500).json({ error: "Something went wrong" });

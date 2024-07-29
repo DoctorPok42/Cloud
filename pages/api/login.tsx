@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "ssh2";
 import { createAuthToken } from "./functions";
 
-const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+const { SFTP_URL, SFTP_PORT, SFTP_PATH } = process.env;
 
 export default async function Login(req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
@@ -17,7 +17,7 @@ export default async function Login(req: NextApiRequest, res: NextApiResponse) {
         conn.sftp(function (err: any, sftp: any) {
           if (err) throw err;
           sftp.readdir(
-            PATH,
+            SFTP_PATH,
             function (err: any, list: any) {
               if (err) {
                 res.status(500).json({ error: "Something went wrong" });

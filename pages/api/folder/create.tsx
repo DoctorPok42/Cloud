@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "ssh2";
 import { verify_token } from "../functions";
 
-const { SFTP_URL, SFTP_PORT, PATH } = process.env;
+const { SFTP_URL, SFTP_PORT, SFTP_PATH } = process.env;
 
 export default function createFolder(
   req: NextApiRequest,
@@ -37,7 +37,7 @@ export default function createFolder(
         if (!uniqueFolder) {
           for (let i = 0; i < folderName.split("/").length; i++) {
             sftp.mkdir(
-              `${PATH}/${path}/${lastPath}`,
+              `${SFTP_PATH}/${path}/${lastPath}`,
               function (err: any) {
                 if (err) {
                   res.status(500).json({ error: "Something went wrong" });
@@ -53,7 +53,7 @@ export default function createFolder(
           }
         } else {
           sftp.mkdir(
-            `${PATH}/${path}/${folderName}`,
+            `${SFTP_PATH}/${path}/${folderName}`,
             function (err: any) {
               if (err) {
                 res.status(500).json({ error: "Something went wrong" });
