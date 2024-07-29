@@ -45,7 +45,7 @@ npm install
 SFTP_URL="" # "192.168.1.1"
 SFTP_PORT= # 22
 ENCODED_KEY="" # "goodkey"
-PATH= # "/path/to/remote/directory"
+SFTP_PATH= # "/path/to/remote/directory"
 ```
 
 5. Run the project
