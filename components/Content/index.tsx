@@ -349,7 +349,7 @@ const Content = ({
                       onDragEnter={() => setFolderHovered(item.filename)}
                       onDragLeave={() => setFolderHovered(null)}
                     >
-                      <FontAwesomeIcon icon={faFolder} color="var(--blue)" />
+                      <FontAwesomeIcon icon={faFolder} color="var(--blue)" width={20} height={20} />
                       <p className={styles.folder__name}>
                         {item.filename.length > 20
                           ? item.filename.slice(0, 20) + "..."

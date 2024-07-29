@@ -47,6 +47,8 @@ const DisplayFile = ({
       <FontAwesomeIcon
         icon={setGoondIcon(item) as any}
         className={styles.field__icon}
+        width={50}
+        height={50}
       />
       <div className={styles.field__date}>
         <p className={styles.field__date__text}>

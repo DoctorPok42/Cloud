@@ -88,7 +88,7 @@ export default function Shared({ cookies }: SharedProps) {
           setNewPath={setNewPath}
           setLoading={setLoading}
           setUpdate={setUpdate}
-          onDrop={onDrop}
+          onDroped={onDrop}
           mainRef={mainRef}
         />
       </div>
