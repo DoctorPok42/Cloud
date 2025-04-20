@@ -4,6 +4,8 @@ import {
   faArrowCircleRight,
   faCopy,
   faDownload,
+  faEye,
+  faEyeDropper,
   faInfoCircle,
   faLink,
   faPen,
@@ -43,6 +45,7 @@ const ContextMenu = ({
     // { name: "Move", value: "move", icon: faArrowCircleRight },
     // { name: "Pin", value: "pin", icon: faThumbTack },
     { name: "Share", value: "share", icon: faLink },
+    // { name: "View", value: "view", icon: faEye },
     { name: "Delete", value: "delete", icon: faTrash, color: true }
   ]
 
