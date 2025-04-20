@@ -27,22 +27,22 @@ const UploadButton = ({
 }: UploadButtonProps) => {
   const action = [
     {
-      icon: <FontAwesomeIcon icon={faFolderPlus} width={20} height={20} />
+      icon: <FontAwesomeIcon icon={faFolderPlus} width={20} height={20} />,
       name: "Create folder here",
       path: "Folder",
     },
     {
-      icon: <FontAwesomeIcon icon={faMusic} width={20} height={20} />
+      icon: <FontAwesomeIcon icon={faMusic} width={20} height={20} />,
       name: "Music",
       path: "Musique",
     },
     {
-      icon: <FontAwesomeIcon icon={faUserGroup} width={20} height={20} />
+      icon: <FontAwesomeIcon icon={faUserGroup} width={20} height={20} />,
       name: "Shared drive",
       path: "Storage",
     },
     {
-      icon: <FontAwesomeIcon icon={faHardDrive} width={20} height={20} />
+      icon: <FontAwesomeIcon icon={faHardDrive} width={20} height={20} />,
       name: "My drive",
       path: null,
     },

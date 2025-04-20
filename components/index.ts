@@ -7,6 +7,7 @@ export { default as DropPopup } from "./DropPopup";
 export { default as Header } from "./Header";
 export { default as InfosPopup } from "./InfosPopup";
 export { default as Menu } from "./Menu";
+export { default as SharePopup } from "./SharePopup";
 export { default as Sidebar } from "./Sidebar";
 export { default as SidebarButton } from "./SideBarButton";
 export { default as UploadButton } from "./UploadButton";
