@@ -1,0 +1,118 @@
+.SharePopup_container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: fadeIn 0.2s ease-in-out;
+
+  .content {
+    width: 25em;
+    background-color: white;
+    border-radius: 0.5em;
+    padding: 1.2em 0.8em;
+    box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: slideIn 0.2s ease-in-out;
+
+    .title {
+      width: 95%;
+      font-size: 0.5em;
+      font-weight: bold;
+      margin-bottom: 1em;
+      overflow: hidden;
+
+      h1 {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
+
+    .body {
+      width: 95%;
+
+      .headband {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5em;
+
+        .copy,
+        .unload {
+          margin-top: 0.5em;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          button {
+            width: 100%;
+            padding: 0.5em;
+            border: none;
+            border-radius: 0.5em;
+            background-color: var(--blue);
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+
+            &:hover {
+              background-color: var(--cyan);
+            }
+          }
+        }
+
+        .unload {
+          margin: 0;
+
+          button {
+            background-color: var(--grey2);
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+
+            &:hover {
+              background-color: var(--grey3);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}

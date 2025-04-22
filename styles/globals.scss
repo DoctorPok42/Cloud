@@ -55,6 +55,52 @@ h6 {
   padding: 0.5em 0.8em;
   padding-right: 0;
   overflow: hidden;
+
+  .share {
+    width: 100%;
+    margin: auto;
+    height: calc(100% - 1.5em);
+    background-color: var(--white-darker);
+    border-radius: 16px;
+    transition: var(--transition);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+
+    .content {
+      width: calc(100% - 1em);
+      height: calc(100% - 1em);
+      padding: 0.5em;
+      border: 1px solid var(--grey2);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      h1 {
+        text-align: center;
+      }
+
+      .btn {
+        padding: 0.5em 1em;
+        border-radius: 12px;
+        background-color: var(--blue);
+        color: var(--white);
+        font-size: 1.2rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s esae-in-out;
+      }
+
+      .btn:hover {
+        background-color: var(--blue2);
+      }
+    }
+  }
 }
 
 @keyframes spin {

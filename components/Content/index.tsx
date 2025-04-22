@@ -4,7 +4,7 @@ import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
 import DisplayFile from "./file";
 import handlDeleteFolder from "./deleteFolder";
 import { Alert, Snackbar } from "@mui/material";
-import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup, InfosPopup } from "../index";
+import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup, InfosPopup, SharePopup } from "../index";
 import { deleteFile, downloadFile } from "../../utils/files";
 import { useDropzone } from "react-dropzone";
 
@@ -43,6 +43,7 @@ const Content = ({
   mainRef,
 }: ContentProps) => {
   const [alertOpen, setAlertOpen] = useState<"file" | "folder" | null>(null);
+  const [sharedOpen, setSharedOpen] = useState<boolean>(false);
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1];
   const [contextMenu, setContextMenu] = useState(initialContextMenu)
   const [fieldSelected, setFieldSelected] = useState<string | null>(null)
@@ -186,16 +187,15 @@ const Content = ({
         )
         break;
       case "rename":
-        const file = data.find((item: any) => item.filename === fieldSelected)
-        const newName = prompt("Enter the new name", file.filename.split(".")[0])
-        const fileExtension = file.filename.split(".")[1]
-        handleRenameFile(file.filename, newName, fileExtension)
+        {
+          const file = data.find((item: any) => item.filename === fieldSelected)
+          const newName = prompt("Enter the new name", file.filename.split(".")[0])
+          const fileExtension = file.filename.split(".")[1]
+          handleRenameFile(file.filename, newName, fileExtension)
+        }
         break;
-      case "copy":
-        break;
-      case "move":
-        break;
-      case "pin":
+      case "share":
+        setSharedOpen(true)
         break;
       case "delete":
         setAlertOpen("file")
@@ -207,8 +207,7 @@ const Content = ({
 
   const handleAddFiles = async (e: File[]) => {
     setStatus("Uploading...")
-    for (var i = 0; i < e.length; i++) {
-      const file = e[i]
+    for (const file of e) {
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = async () => {
@@ -250,6 +249,16 @@ const Content = ({
   return (
     <div className={styles.contentContainer}>
       <div className={styles.content}>
+        {sharedOpen &&
+          <SharePopup
+            item={data?.find((item: any) => item.filename === fieldSelected)}
+            userId={username}
+            cookies={cookies}
+            onClose={() => setSharedOpen(false)}
+            setStatus={setStatus}
+          />
+        }
+
         {alertOpen &&
           <AlertDialog
             title={`Are you sure you want to delete this ${alertOpen}?`}

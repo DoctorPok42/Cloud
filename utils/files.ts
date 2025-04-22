@@ -1,4 +1,4 @@
-const decodeType = (filename: string) => {
+export const decodeType = (filename: string) => {
   const type = filename.lastIndexOf(".");
   switch (filename.substring(type + 1)) {
     case "mp3":
