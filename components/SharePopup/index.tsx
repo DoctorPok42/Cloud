@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import Select from "react-select";
-import router from 'next/router';
+import { useClickAway } from "@uidotdev/usehooks";
 
 import styles from './style.module.scss';
-import { MenuItem } from '@mui/material';
 
 interface SharePopupProps {
   item: {
@@ -13,15 +12,21 @@ interface SharePopupProps {
   } | undefined;
   userId: string | undefined;
   cookies: string;
+  onClose: () => void;
 }
 
 const SharePopup = ({
   item,
   userId,
   cookies,
+  onClose,
 }: SharePopupProps) => {
   const [optionSelected, setOptionSelected] = useState<string>("none");
   const [code, setCode] = useState<string>("");
+
+  const ref = useClickAway(() => {
+    onClose();
+  }) as React.MutableRefObject<HTMLDivElement | null>;
 
   const options = [
     { value: "none", label: "None", color : "red" },
@@ -56,7 +61,7 @@ const SharePopup = ({
   if (!item) return null;
   return (
     <div className={styles.SharePopup_container}>
-      <div className={styles.content}>
+      <div ref={ref} className={styles.content}>
         <div className={styles.title}>
           <h1>Share "<span>{item.filename}</span>"</h1>
         </div>

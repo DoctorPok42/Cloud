@@ -194,6 +194,7 @@ const Content = ({
         break;
       case "share":
         setSharedOpen(true)
+        break;
       case "delete":
         setAlertOpen("file")
         break;
@@ -251,6 +252,7 @@ const Content = ({
             item={data?.find((item: any) => item.filename === fieldSelected)}
             userId={username}
             cookies={cookies}
+            onClose={() => setSharedOpen(false)}
           />
         }
 

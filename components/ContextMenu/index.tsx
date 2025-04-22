@@ -1,15 +1,10 @@
 import React from 'react';
 import { useClickAway } from "@uidotdev/usehooks";
 import {
-  faArrowCircleRight,
-  faCopy,
   faDownload,
-  faEye,
-  faEyeDropper,
   faInfoCircle,
   faLink,
   faPen,
-  faThumbTack,
   faTrash
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -35,7 +30,7 @@ const ContextMenu = ({
 }: ContextMenuProps) => {
   const ref = useClickAway(() => {
     closeContextMenu();
-  }) as React.MutableRefObject<HTMLDivElement>;
+  }) as React.MutableRefObject<HTMLDivElement | null>;
 
   const menuButtons = [
     { name: "Infos", value: "infos", icon: faInfoCircle },
