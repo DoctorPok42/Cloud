@@ -34,8 +34,6 @@ export default async function getShareLink(req: NextApiRequest, res: NextApiResp
           if (!fileExists) {
             return res.status(404).json({ error: "File not found" });
           }
-          const shareLink = `https://${SFTP_URL}:${SFTP_PORT}/files/${username}/${path ? path + "/" : ""}${newFileName}`;
-          return res.status(200).json({ link: shareLink });
         });
       });
     })
@@ -47,7 +45,7 @@ export default async function getShareLink(req: NextApiRequest, res: NextApiResp
     });
 
   try {
-    const uniqueId = `${userId}_${itemId}`;
+    const uniqueId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const { db } = await connectToDatabase()
 
     const existingShare = await db.collection("share").findOne({
@@ -63,6 +61,8 @@ export default async function getShareLink(req: NextApiRequest, res: NextApiResp
       userId: userId,
       itemId: itemId,
       uniqueId: uniqueId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     res.status(200).json({ code: uniqueId });

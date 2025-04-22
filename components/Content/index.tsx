@@ -187,10 +187,12 @@ const Content = ({
         )
         break;
       case "rename":
-        const file = data.find((item: any) => item.filename === fieldSelected)
-        const newName = prompt("Enter the new name", file.filename.split(".")[0])
-        const fileExtension = file.filename.split(".")[1]
-        handleRenameFile(file.filename, newName, fileExtension)
+        {
+          const file = data.find((item: any) => item.filename === fieldSelected)
+          const newName = prompt("Enter the new name", file.filename.split(".")[0])
+          const fileExtension = file.filename.split(".")[1]
+          handleRenameFile(file.filename, newName, fileExtension)
+        }
         break;
       case "share":
         setSharedOpen(true)
@@ -253,6 +255,7 @@ const Content = ({
             userId={username}
             cookies={cookies}
             onClose={() => setSharedOpen(false)}
+            setStatus={setStatus}
           />
         }
 

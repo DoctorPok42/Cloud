@@ -51,14 +51,14 @@ h6 {
   width: calc(100vw - 0.8em);
   height: calc(100vh - 1em);
   display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: var(--white);
   padding: 0.5em 0.8em;
+  padding-right: 0;
   overflow: hidden;
 
   .share {
     width: 100%;
+    margin: auto;
     height: calc(100% - 1.5em);
     background-color: var(--white-darker);
     border-radius: 16px;

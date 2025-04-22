@@ -24,7 +24,7 @@ export default async function getSharedFiles(
   const { db } = await connectToDatabase();
   const share = await db.collection("share").findOne({ uniqueId: code });
   if (!share) {
-    return res.status(404).json({ error: "Share not found" });
+    return res.status(404).json({ error: "File not found" });
   }
   const { userId, itemId } = share;
 

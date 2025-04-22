@@ -13,6 +13,7 @@ interface SharePopupProps {
   userId: string | undefined;
   cookies: string;
   onClose: () => void;
+  setStatus: (status: string) => void;
 }
 
 const SharePopup = ({
@@ -20,6 +21,7 @@ const SharePopup = ({
   userId,
   cookies,
   onClose,
+  setStatus,
 }: SharePopupProps) => {
   const [optionSelected, setOptionSelected] = useState<string>("none");
   const [code, setCode] = useState<string>("");
@@ -36,7 +38,9 @@ const SharePopup = ({
 
   const handleCopyLink = async () => {
     try {
-      console.log(userId, item, cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]);
+      if (code)
+        return navigator.clipboard.writeText(`https://cloud.doctorpok.io/share/${code}`);
+
       const response = await fetch("/api/getShareLink", {
         method: "POST",
         headers: {
@@ -48,11 +52,53 @@ const SharePopup = ({
           token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
         }),
       });
-      const data = await response.json();
-      setCode(data.code);
-      if (data.error) {
-        console.error("Error fetching share link:", data.error);
+      if (response.ok) {
+        const data = await response.json();
+        setCode(data.code);
+        navigator.clipboard.writeText(`https://cloud.doctorpok.io/share/${data.code}`);
+
+        if (data.error)
+          console.error("Error fetching share link:", data.error);
+      } else {
+          console.error("Error fetching share link:", response.statusText);
       }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  const handleUnload = () => {
+    if (!code) {
+      setStatus("Error: No link to unload");
+      return;
+    }
+
+    try {
+      fetch("/api/unloadShareLink", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          itemId: item?.filename,
+          token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
+          code: code,
+        }),
+      }).then((res) => {
+        if (res.ok) {
+          setStatus("Success: Unloaded link");
+          setCode("");
+          setTimeout(() => {
+            setStatus("");
+          }, 3000);
+        } else {
+          setStatus("Error: Failed to unload link");
+          setTimeout(() => {
+            setStatus("");
+          }, 3000);
+        }
+      })
     } catch (error) {
       console.error("Error:", error);
     }
@@ -208,13 +254,21 @@ const SharePopup = ({
 
             {code && (
               <div className={styles.code}>
-                <span>Code: {`https://cloud.doctorpok.io/share/${code}`}</span>
+                <a href={`https://cloud.doctorpok.io/share/${code}`} target='_blank'>{`/share/${code}`}</a>
               </div>
             )}
 
             <div className={styles.copy}>
               <button className={styles.button} onClick={handleCopyLink}>
-                <span>Copy link</span>
+                <span>
+                  {code ? "Copy Link" : "Get Link"}
+                </span>
+              </button>
+            </div>
+
+            <div className={styles.unload}>
+              <button className={styles.button} onClick={handleUnload}>
+                <span>Unload Link</span>
               </button>
             </div>
           </div>

@@ -47,7 +47,7 @@ const Code = ({ code }: any) => {
     <div className='container' style={{ paddingRight: "0.8em", width: "calc(100% - 1.6em)" }}>
       <div className="share">
         <div className="content">
-          <h1>Share File by Link ({code})</h1>
+          <h1>Share File by Link</h1>
           {error && <p className='error'>Error: {error}</p>}
           {!error && loading ? <p>Fetching your file...</p> : !error && <p>File fetched successfully!</p>}
 
@@ -55,7 +55,7 @@ const Code = ({ code }: any) => {
 
           {(!loading && !error) && <>
             <p>Click the button below to download your file.</p>
-            <button className='btn' onClick={() => link.click()}>Download File</button>
+            <button className='btn' onClick={() => link?.click()}>Download File</button>
             </>
           }
         </div>
