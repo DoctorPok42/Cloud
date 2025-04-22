@@ -51,14 +51,15 @@ h6 {
   width: calc(100vw - 0.8em);
   height: calc(100vh - 1em);
   display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--white);
   padding: 0.5em 0.8em;
-  padding-right: 0;
   overflow: hidden;
 
   .share {
     width: 100%;
-    height: calc(100% - 0.9em);
+    height: calc(100% - 1.5em);
     background-color: var(--white-darker);
     border-radius: 16px;
     transition: var(--transition);
@@ -81,6 +82,22 @@ h6 {
 
       h1 {
         text-align: center;
+      }
+
+      .btn {
+        padding: 0.5em 1em;
+        border-radius: 12px;
+        background-color: var(--blue);
+        color: var(--white);
+        font-size: 1.2rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s esae-in-out;
+      }
+
+      .btn:hover {
+        background-color: var(--blue2);
       }
     }
   }
