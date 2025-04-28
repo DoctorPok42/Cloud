@@ -40,7 +40,7 @@ export default async function getSharedFiles(
               conn.end();
               return;
             } else {
-              res.status(200).json({ data: data });
+              res.status(200).json({ data: data, name: itemId });
             }
             conn.end();
           }

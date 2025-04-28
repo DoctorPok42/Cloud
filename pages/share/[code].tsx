@@ -5,7 +5,8 @@ import Image from 'next/image';
 const Code = ({ code }: any) => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [link, setLink] = useState<HTMLAnchorElement>();
+  const [file, setFile] = useState<any>(null);
+  const [fileName, setFileName] = useState<string>("");
 
   const fetchShareField = async (code: string) => {
     try {
@@ -18,13 +19,13 @@ const Code = ({ code }: any) => {
       });
       const data = await response.json();
       if (response.ok) {
-        const url = `data:${decodeType(code)};base64,${Buffer.from(
-          data.data.data
-        ).toString("base64")}`;
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = code;
-        setLink(link);
+        setFileName(data.name);
+        const fileData = data.data;
+        const fileType = decodeType(fileData.type);
+        const fileBuffer = Buffer.from(fileData.data, "base64");
+        const blob = new Blob([fileBuffer], { type: fileType });
+        setFile(blob);
+        setLoading(false);
       } else {
         setError(data.error ?? "Something went wrong");
       }
@@ -32,6 +33,19 @@ const Code = ({ code }: any) => {
       setError("Network error: " + error.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  const handleDownload = () => {
+    if (file) {
+        const fileURL = URL.createObjectURL(file);
+        const link = document.createElement("a");
+        link.href = fileURL;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(fileURL);
     }
   }
 
@@ -55,7 +69,7 @@ const Code = ({ code }: any) => {
 
           {(!loading && !error) && <>
             <p>Click the button below to download your file.</p>
-            <button className='btn' onClick={() => link?.click()}>Download File</button>
+            <button className='btn' onClick={handleDownload}>Download File</button>
             </>
           }
         </div>
