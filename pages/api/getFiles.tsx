@@ -17,7 +17,9 @@ export default async function getFiles(
 
   const verified = verify_token(token);
   if (!verified) {
-    return res.status(401).json({ error: "Invalid token" });
+    res.redirect(401, "/login");
+    res.status(401).json({ error: "Invalid token" });
+    return;
   }
 
   const data = await new Promise((resolve, reject) => {

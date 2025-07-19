@@ -24,11 +24,14 @@ export default async function Login(req: NextApiRequest, res: NextApiResponse) {
                 conn.end();
                 return;
               } else {
-                const token = createAuthToken(body.password);
+                const token = createAuthToken(body.password, body.long);
                 res.setHeader("Set-Cookie", [
                   `username=${body.username}; path=/; Max-Age=3600`,
                   `token=${token}; path=/; Max-Age=3600`,
                 ]);
+                if (body.long)
+                  res.status(200).json({ data: list, token });
+                else
                 res.status(200).json({ data: list });
               }
               resolve(list);

@@ -15,8 +15,11 @@ export default async function getShareLink(req: NextApiRequest, res: NextApiResp
   const conn = new Client();
 
   const verified = verify_token(token);
-  if (!verified)
-    return res.status(401).json({ error: "Invalid token" });
+  if (!verified) {
+    res.redirect(401, "/login");
+    res.status(401).json({ error: "Invalid token" });
+    return;
+  }
 
   // tester si le fichier existe
   const filename = itemId.split("/").pop() as string;

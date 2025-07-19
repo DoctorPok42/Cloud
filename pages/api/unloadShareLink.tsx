@@ -11,8 +11,11 @@ export default async function unloadShareLink(req: NextApiRequest, res: NextApiR
     }
 
     const verified = verify_token(token);
-    if (!verified)
-      return res.status(401).json({ error: "Invalid token" });
+    if (!verified) {
+      res.redirect(401, "/login");
+      res.status(401).json({ error: "Invalid token" });
+      return;
+    }
 
 
     const { db } = await connectToDatabase();

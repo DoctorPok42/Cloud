@@ -6,8 +6,9 @@ const { SFTP_URL, SFTP_PORT, SFTP_PATH } = process.env;
 
 export const config = {
   api: {
+    responseLimit: false,
     bodyParser: {
-      sizeLimit: "10mb",
+      sizeLimit: "100gb",
     },
   },
 }
@@ -16,7 +17,7 @@ export default async function uploadFile(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  var body = req.body;
+  const body = req.body;
   const { username, token, path, fileDataArray } = JSON.parse(body);
 
   if (!username || !token || !fileDataArray) {
@@ -26,8 +27,7 @@ export default async function uploadFile(
   const verified = verify_token(token);
 
   const fileContentsArray = [] as any;
-  for (let i = 0; i < fileDataArray.length; i++) {
-    const { data } = fileDataArray[i];
+  for (const { data } of fileDataArray) {
     let fileContents;
     fileContents = Buffer.from(data.split(",")[1], "base64");
     fileContentsArray.push(fileContents);
@@ -46,6 +46,7 @@ export default async function uploadFile(
               ? `${SFTP_PATH}/${path}/${fileName}`
               : `${SFTP_PATH}/${username}/${fileName}`,
             fileContents,
+            { encoding: "utf8", flag: "w", mode: 0o644 },
             function (err: any) {
               if (err) {
                 res.status(500).json({ error: "Something went wrong" });
@@ -69,4 +70,10 @@ export default async function uploadFile(
       username: username,
       password: verified,
     });
+
+  if (!SFTP_URL || !SFTP_PORT || !SFTP_PATH) {
+    return res.status(500).json({ error: "Server configuration error" });
+  }
+
+  res.status(200).json({ message: "Upload initiated" });
 }
