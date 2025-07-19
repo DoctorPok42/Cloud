@@ -1,14 +1,13 @@
-import React, { RefObject, useCallback, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolder, faFolderMinus } from "@fortawesome/free-solid-svg-icons";
+import React, { RefObject, useCallback, useEffect, useState } from "react";
 import DisplayFile from "./file";
 import handlDeleteFolder from "./deleteFolder";
 import { Alert, Snackbar } from "@mui/material";
 import { UploadButton, AlertDialog, Header, ContextMenu, DropPopup, InfosPopup, SharePopup } from "../index";
 import { deleteFile, downloadFile } from "../../utils/files";
-import { useDropzone } from "react-dropzone";
+import DisplayFolder from "./folder";
 
 import styles from "./style.module.scss";
+import { useDropzone } from "react-dropzone";
 
 interface ContentProps {
   data: any;
@@ -20,7 +19,10 @@ interface ContentProps {
   setLoading: (loading: boolean) => void;
   setUpdate: (update: boolean) => void;
   onDroped: boolean;
+  setOnDrop: (onDrop: boolean) => void;
   mainRef: RefObject<HTMLDivElement>;
+  isReduced: boolean;
+  setIsReduced: (isReduced: boolean) => void;
 }
 
 const initialContextMenu = {
@@ -40,7 +42,10 @@ const Content = ({
   setLoading,
   setUpdate,
   onDroped,
+  setOnDrop,
   mainRef,
+  isReduced,
+  setIsReduced,
 }: ContentProps) => {
   const [alertOpen, setAlertOpen] = useState<"file" | "folder" | null>(null);
   const [sharedOpen, setSharedOpen] = useState<boolean>(false);
@@ -83,21 +88,6 @@ const Content = ({
     }
   };
 
-  const isRacine = () => {
-    if (newPath === username || newPath === username + "/") {
-      return true;
-    }
-
-    if (newPath === "Storage" || newPath === "Storage/") {
-      return true;
-    }
-
-    if (newPath === "Musique" || newPath === "Musique/") {
-      return true;
-    }
-    return false;
-  };
-
   const handlAlert = () => {
     switch (status.split(":")[0]) {
       case "Error":
@@ -133,14 +123,6 @@ const Content = ({
       cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1]
     )
     handleConfirm()
-  }
-
-  const handleGoBack = () => {
-    let relativePath = newPath.split("/").slice(0, -1).join("/");
-    if (relativePath === "/") {
-      relativePath = newPath.split("/")[0];
-    }
-    setNewPath(relativePath);
   }
 
   const handleRenameFile = async (filename: string, newFileName: string | null, fileExtension: string) => {
@@ -231,6 +213,7 @@ const Content = ({
         const data = await response.json();
 
         if (data.error) {
+          console.error("Error uploading file:", data.error);
           setStatus("Error: " + data.error);
           setLoading(false);
         } else {
@@ -244,10 +227,20 @@ const Content = ({
 
   const onDrop = useCallback((acceptedFiles: File[]) => handleAddFiles(acceptedFiles), []);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
   return (
-    <div className={styles.contentContainer}>
+    <div className={styles.contentContainer} style={{
+      width: isReduced ? "95%" : "85%",
+      transition: "width 0.3s ease-in-out",
+      overflow: "hidden",
+    }} ref={mainRef} onDragEnter={(e) => {
+      e.preventDefault();
+      setOnDrop(true);
+      setFolderHovered(newPath);
+    }} onDragOver={(e) => {
+      e.preventDefault();
+      setOnDrop(true);
+      setFolderHovered(newPath);
+    }}>
       <div className={styles.content}>
         {sharedOpen &&
           <SharePopup
@@ -270,12 +263,14 @@ const Content = ({
 
         {infosFile &&
           <InfosPopup
-            infosFile={infosFile}
+            infosFile={infosFile[0]}
             setInfosFile={setInfosFile}
+            path={newPath}
+            handleRenameFile={handleRenameFile}
           />
         }
 
-        <Header cookies={cookies} path={newPath} setPath={setNewPath} />
+        <Header cookies={cookies} path={newPath} setPath={setNewPath} isReduced={isReduced} setIsReduced={setIsReduced} />
 
         {status !== "" && <Snackbar
           open={true}
@@ -301,9 +296,17 @@ const Content = ({
           />
         }
 
+        {onDroped &&
+          <DropPopup
+            folderHovered={folderHovered}
+            path={newPath}
+            onDrop={onDrop}
+            setOnDrop={setOnDrop}
+          />
+        }
+
         {data !== null &&
           <div
-            {...getRootProps()}
             ref={mainRef}
             className={styles.lists}
             style={{
@@ -312,78 +315,52 @@ const Content = ({
               zIndex: onDroped ? 1000 : 0,
             }}
           >
-            {onDroped && <input {...getInputProps()} />}
+            <div className={styles.block}></div>
 
-            {onDroped &&
-              <DropPopup
-                folderHovered={folderHovered}
-                path={newPath}
-              />
-            }
-
-            {!isRacine() && (
-              <>
-                <div
-                  className={styles.folder__bis}
-                  onClick={() => handleGoBack()}
-                >
-                  <FontAwesomeIcon icon={faFolder} />
-                  <p className={styles.folder__name}>
-                    ..
-                  </p>
-                </div>
-
-                <div
-                  className={styles.folder__delete}
-                  onClick={() => setAlertOpen("folder")}
-                >
-                  <FontAwesomeIcon icon={faFolderMinus} />
-                  <p className={styles.folder__name}>
-                    Delete This Folder
-                  </p>
-                </div>
-              </>
-            )}
-            {data.map((item: any) => {
-              return (
+            <div className={styles.folders}>
+              {/* !isRacine() && (
                 <>
-                  {item.longname[0] === "d" && (
-                    <div
-                      key={item.filename}
-                      className={styles.folder}
-                      onClick={(e) => {
-                        if (e.detail === 2)
-                          setNewPath(newPath + "/" + item.filename);
-                      }}
-                      onDragEnter={() => setFolderHovered(item.filename)}
-                      onDragLeave={() => setFolderHovered(null)}
-                    >
-                      <FontAwesomeIcon icon={faFolder} color="var(--blue)" width={20} height={20} />
-                      <p className={styles.folder__name}>
-                        {item.filename.length > 20
-                          ? item.filename.slice(0, 20) + "..."
-                          : item.filename}
-                      </p>
-                    </div>
-                  )}
+                  <DisplayFolder
+                    item={{ filename: "Go Back", isServer: true, onClick: handleGoBack }}
+                    icon={{ icon: faFolderTree }}
+                  />
+
+                  <DisplayFolder
+                    item={{ filename: "Delete This Folder", isServer: true, onClick: () => setAlertOpen("folder") }}
+                    icon={{ icon: faFolderMinus, color: "#f55f5e" }}
+                  />
                 </>
-              );
-            })}
+              )}*/}
+
+              {data.map((item: any) => {
+                return (
+                  <>
+                    {item.longname[0] === "d" && (
+                      <DisplayFolder
+                        key={item.filename}
+                        item={item}
+                        setNewPath={setNewPath}
+                        newPath={newPath}
+                        setFolderHovered={setFolderHovered}
+                        folderHovered={folderHovered}
+                        handleContextMenu={handleContextMenu}
+                        setFieldSelected={setFieldSelected}
+                      />
+                    )}
+                  </>
+                );
+              })}
+            </div>
+
             {data.map((item: any) => {
               if (item.longname[0] == "-") {
                 return (
-                  <div style={{
-                    zIndex: !onDrop ? 1000000 : 1000,
-                  }}>
+                  <div key={item.filename}>
                     <DisplayFile
-                        item={item}
-                        setStatus={setStatus}
-                        cookies={cookies}
-                        path={newPath}
-                        setUpdate={setUpdate}
-                        setLoading={setLoading}
-                        handleContextMenu={handleContextMenu}
-                        setFieldSelected={setFieldSelected}
+                      item={item}
+                      handleContextMenu={handleContextMenu}
+                      setFieldSelected={setFieldSelected}
+                      path={newPath.split("/").slice(1).join("/")}
                     />
                   </div>
                 );

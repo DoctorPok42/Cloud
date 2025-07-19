@@ -1,41 +1,58 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudArrowUp, faFolder, faHardDrive } from '@fortawesome/free-solid-svg-icons';
+import { faFolderOpen, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './style.module.scss';
+import { useDropzone } from 'react-dropzone';
 
 interface DropPopupProps {
   folderHovered: string | null;
   path: string;
+  onDrop: (acceptedFiles: File[]) => void;
+  setOnDrop: (onDrop: boolean) => void;
 }
 
 const DropPopup = ({
   folderHovered,
   path,
+  onDrop,
+  setOnDrop,
 }: DropPopupProps) => {
-  const formatName = (name: string | null) => {
-    if (!name) return path.split("/").pop();
-
-    if (name.length > 25) {
-      return name.slice(0, 25) + "...";
-    }
-    return name;
-  }
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
-    <div className={styles.DropPopup_container}>
-      <div className={styles.icon}>
-        <FontAwesomeIcon icon={faCloudArrowUp} color='var(--blue)' size='3x' />
-      </div>
+    <div className={styles.DropPopup_container}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        setOnDrop(false);
+      }}
+    >
+      <div className={styles.content}>
+        <div className={styles.title}>
+          Upload and Attach files
 
-      <div className={styles.title}>
-        Déposer des fichier pour les importer dans
-      </div>
+          <div className={styles.icon} onClick={() => setOnDrop(false)}>
+            <FontAwesomeIcon icon={faTimes} />
+          </div>
+        </div>
 
-      <div className={styles.folderName}>
-        <FontAwesomeIcon icon={
-          (path.includes("/") || folderHovered) ? faFolder : faHardDrive
-        } /> {formatName(folderHovered)}
+        <div className={styles.zone} {...getRootProps()}>
+          <input {...getInputProps()} />
+
+          <FontAwesomeIcon
+            icon={faFolderOpen}
+            className={styles.icon}
+            size='2x'
+            color='#eaeaea'
+          />
+
+          <p className={styles.zone__text}>
+            Click to upload or drag and drop
+          </p>
+
+          <span>
+            Maximum file size: 100GB
+          </span>
+        </div>
       </div>
     </div>
   );

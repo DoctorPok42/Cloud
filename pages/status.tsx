@@ -14,7 +14,7 @@ const Status = ({ results }: any) => {
         <meta name="author" content="DoctorPok" />
         <meta name="keywords" content="Cloud" />
       </Head>
-      <div className={styles.back}>fsd</div>
+      <div className={styles.back}></div>
       <div className={styles.box}>
         <div className={styles.title}>
           <h2>Status</h2>
@@ -25,6 +25,7 @@ const Status = ({ results }: any) => {
               javascript: history.back();
             }}
             icon={faCircleArrowLeft}
+            color="var(--white)"
           />
         </div>
         <div className={styles.content}>

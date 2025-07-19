@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-export function createAuthToken(token: string) {
+export function createAuthToken(token: string, long?: boolean) {
   const tokenJ = jwt.sign({ token: token }, process.env.ENCODED_KEY as string, {
-    expiresIn: "1h",
+    ...(!long && { expiresIn: "1h" }),
   });
   return tokenJ;
 }

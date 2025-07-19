@@ -30,7 +30,7 @@ const BreadCrumbs = ({
                   handlFolder(newPath, item);
                 }}
               >
-                {item.length > 20 ? item.slice(0, 20) + "..." : item}
+                {item}
               </span>
             );
           }

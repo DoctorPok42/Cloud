@@ -5,54 +5,168 @@
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(5px);
+  justify-content: flex-end;
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.1);
   z-index: 1;
+  animation: fadeIn 0.2s ease-in-out forwards;
 
   .InfosPopup_content {
-    width: 50%;
+    width: 18em;
     background-color: var(--white);
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-    border-radius: 22px;
-    padding: 8px;
-    animation: zoom 0.1s ease forwards;
+    box-shadow: inset 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 0 8px 8px 0;
+    padding: 1em;
+    animation: zoom 0.2s ease-in-out forwards;
 
-    .InfosPopup_file {
-      display: flex;
-      align-items: center;
+    .field__value {
+      padding: 0.25em 0.5em;
+      box-shadow: 0 0 5px 2px #f1f1f1;
+      border-radius: 8px;
+      transition: all 0.1s linear;
 
-      .icon {
-        width: 13rem;
-        height: 13rem;
-        border-radius: 14px;
-        background-color: var(--blue);
-        color: var(--white);
+      .title {
+        width: calc(100% - 0.5em);
         display: flex;
-        justify-content: center;
         align-items: center;
-        font-size: 6em;
+        margin-left: 0.5em;
+        margin-top: 0.25em;
+        gap: 0.25em;
+
+        .field__name {
+          width: calc(100% - 2.8em);
+          margin: 0;
+          font-size: 0.9em;
+          font-weight: 600;
+          color: var(--black);
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+
+          input[type="text"] {
+            border-radius: 4px;
+            border: none;
+            background-color: var(--white);
+            border: #939393 1px solid;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: var(--black);
+            outline: none;
+          }
+        }
       }
 
-      .text {
-        margin-left: 4em;
-        display: flex;
-        flex-direction: column;
-        gap: 1em;
+      p {
+        font-size: 0.7em;
+        font-weight: 1;
+        margin: 0.25em 0 1em 0.7em;
+        color: #939393;
+      }
+    }
 
+    .zoom {
+      position: fixed;
+      top: 6.5em;
+      right: 1.5em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 9;
+
+      button {
+        padding: 0.25em 0.5em;
+        border-radius: 4px 4px 0 0;
+        background-color: var(--black);
+        border: none;
+        border-bottom: #939393 0;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          background-color: var(--grey);
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          margin-top: -0.2em;
+        }
+      }
+
+      button:nth-child(2) {
+        border-radius: 0 0 4px 4px;
+      }
+    }
+
+    .details {
+      margin-top: 1em;
+      border-top: 1px solid #939393;
+
+      .title {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: var(--black);
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+
+      .details__content {
         p {
-          margin: 0;
+          width: 100%;
+          margin: 0.7em 0;
+          display: flex;
+          align-items: center;
+          gap: 0.5em;
+
+          span {
+            width: 8em;
+            font-weight: 400;
+            font-size: 0.8em;
+            color: #939393;
+
+            p {
+              margin: 0;
+
+              img {
+                width: 1.2em;
+                height: 1.2em;
+              }
+            }
+          }
+
+          span:nth-child(2) {
+            width: calc(100% - 8em);
+            font-weight: 600;
+            color: var(--black);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+          }
+        }
+
+        p:nth-child(1) {
+          margin-top: 0;
         }
       }
     }
   }
+}
 
-  @keyframes zoom {
-    0% {
-      transform: scale(0);
-    }
-    100% {
-      transform: scale(1);
-    }
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom {
+  0% {
+    transform: translateX(20%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

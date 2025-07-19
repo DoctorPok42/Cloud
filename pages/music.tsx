@@ -8,9 +8,11 @@ import { Part } from "../types/index";
 
 interface MusiqueProps {
   cookies: string;
+  isReduced: boolean;
+  setIsReduced: (isReduced: boolean) => void;
 }
 
-export default function Shared({ cookies }: MusiqueProps) {
+export default function Shared({ cookies, isReduced, setIsReduced }: MusiqueProps) {
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1] as string;
   const [path, setPath] = useState<Part>("music");
   const [newPath, setNewPath] = useState<string>("Musique");
@@ -20,7 +22,7 @@ export default function Shared({ cookies }: MusiqueProps) {
   const [update, setUpdate] = useState<boolean>(false);
   const [onDrop, setOnDrop] = useState<boolean>(false)
 
-  const mainRef = useRef<HTMLDivElement>(null)
+  const mainRef = useRef<any>(null)
 
   useEffect(() => {
     setLoading(true);
@@ -50,35 +52,32 @@ export default function Shared({ cookies }: MusiqueProps) {
   useEffect(() => {
     const onDragOver = (e: DragEvent) => {
       e.preventDefault()
+      console.log("")
       setOnDrop(true)
     }
 
-    const onDragLeave = (e: DragEvent) => {
-      e.preventDefault()
-      setOnDrop(false)
-    }
+    mainRef.current?.addEventListener("dragenter", onDragOver)
+    mainRef.current?.addEventListener("dragstart", onDragOver)
+    mainRef.current?.addEventListener("ondrop", onDragOver)
 
-    const onDrop = (e: DragEvent) => {
-      e.preventDefault()
-      setOnDrop(false)
+    return () => {
+      mainRef.current?.removeEventListener("dragover", onDragOver)
+      mainRef.current?.removeEventListener("dragstart", onDragOver)
+      mainRef.current?.removeEventListener("ondrop", onDragOver)
     }
-
-    mainRef.current?.addEventListener("dragover", onDragOver)
-    mainRef.current?.addEventListener("dragleave", onDragLeave)
-    mainRef.current?.addEventListener("drop", onDrop)
-  }, [])
+  }, [mainRef])
 
   return (
     <>
       <Head>
         <title>Cloud | Musique</title>
-        {/* <link rel="icon" href="/favicon.ico" /> */}
+        <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="Cloud" />
         <meta name="author" content="DoctorPok" />
         <meta name="keywords" content="Cloud" />
       </Head>
       <div className="container">
-        <Sidebar page={path} setPage={setPath} loading={loading} />
+        <Sidebar page={path} setPage={setPath} loading={loading} isReduced={isReduced} />
         <Content
           data={data}
           cookies={cookies}
@@ -89,7 +88,10 @@ export default function Shared({ cookies }: MusiqueProps) {
           setLoading={setLoading}
           setUpdate={setUpdate}
           onDroped={onDrop}
+          setOnDrop={setOnDrop}
           mainRef={mainRef}
+          isReduced={isReduced}
+          setIsReduced={setIsReduced}
         />
       </div>
     </>

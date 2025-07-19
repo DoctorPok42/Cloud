@@ -13,13 +13,14 @@
   .active {
     position: absolute;
     height: 70%;
-    width: 0.5em;
-    border-radius: 0 8px 8px 0;
-    background-color: var(--blue);
+    width: 0.25em;
+    margin-left: 0.35em;
+    border-radius: 8px;
+    background-color: #4488dc;
     transition: var(--transition);
   }
 }
 
 .SidebarButton:hover {
-  background-color: var(--grey3);
+  background-color: #edf4ff;
 }

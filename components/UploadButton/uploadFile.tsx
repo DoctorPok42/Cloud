@@ -61,7 +61,7 @@ const uploadFile = async (
       body: JSON.stringify({
         username: cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1],
         token: cookies.split(";").find((item) => item.trim().startsWith("token="))?.split("=")[1],
-        path: path === null ? newPath : path,
+        path: newPath ?? path,
         fileDataArray: fileDataArray,
       }),
     });

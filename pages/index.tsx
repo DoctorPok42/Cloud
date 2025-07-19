@@ -6,12 +6,15 @@ import {
 } from "../components";
 import { Part } from "../types/index";
 import { verify_token } from "./api/functions";
+import { useDropzone } from "react-dropzone";
 
 interface HomeProps {
   cookies: string;
+  isReduced: boolean;
+  setIsReduced: (isReduced: boolean) => void;
 }
 
-export default function Home({ cookies }: HomeProps) {
+export default function Home({ cookies, isReduced, setIsReduced }: HomeProps) {
   const username = cookies.split(";").find((item) => item.trim().startsWith("username="))?.split("=")[1] as string;
   const [path, setPath] = useState<Part>("my_drive");
   const [newPath, setNewPath] = useState<string>(username);
@@ -21,7 +24,7 @@ export default function Home({ cookies }: HomeProps) {
   const [update, setUpdate] = useState<boolean>(false);
   const [onDrop, setOnDrop] = useState<boolean>(false)
 
-  const mainRef = useRef<HTMLDivElement>(null)
+  const mainRef = useRef<any>(null)
 
   useEffect(() => {
     setLoading(true);
@@ -79,7 +82,7 @@ export default function Home({ cookies }: HomeProps) {
         <meta name="keywords" content="Cloud" />
       </Head>
       <div className="container">
-        <Sidebar page={path} setPage={setPath} loading={loading} />
+        <Sidebar page={path} setPage={setPath} loading={loading} isReduced={isReduced} />
         <Content
           data={data}
           cookies={cookies}
@@ -90,8 +93,11 @@ export default function Home({ cookies }: HomeProps) {
           setLoading={setLoading}
           setUpdate={setUpdate}
           onDroped={onDrop}
+          setOnDrop={setOnDrop}
           mainRef={mainRef}
-        />
+          isReduced={isReduced}
+          setIsReduced={setIsReduced}
+          />
       </div>
     </>
   );

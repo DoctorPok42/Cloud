@@ -3,7 +3,7 @@
   width: 10em;
   padding: 0.5em;
   display: flex;
-  flex-direction: column;
+    flex-direction: column;
   background-color: var(--white);
   border-radius: 8px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
@@ -51,7 +51,7 @@
 @keyframes display {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;

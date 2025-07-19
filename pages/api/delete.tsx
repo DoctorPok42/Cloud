@@ -31,7 +31,7 @@ export default function deleteFile(req: NextApiRequest, res: NextApiResponse) {
             } else {
               res.status(200).json({ data: "File deleted!" });
             }
-            conn.end();
+            return conn.end();
           }
         );
       });
@@ -49,4 +49,6 @@ export default function deleteFile(req: NextApiRequest, res: NextApiResponse) {
       username: username,
       password: verified,
     });
+
+  res.status(200).json({ message: "Request received" });
 }

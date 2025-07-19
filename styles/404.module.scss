@@ -7,18 +7,17 @@
   align-items: center;
 
   .box {
-    width: 400px;
-    height: 400px;
-    background: var(--black);
-    color: var(--white);
-    border-radius: 10%;
+    padding: 1em 5em;
+    background: #f9fafe;
+    color: var(--black);
+    border-radius: 24px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     text-align: center;
     transition: all 0.3s linear;
-    box-shadow: 10px 10px 0 0 var(--orange);
+    box-shadow: 0 0 10px 10px #edf4ff;
 
     .title {
       margin-top: 30px;
@@ -31,54 +30,28 @@
 
     .button {
       height: 100%;
-      margin-top: 10px;
-      margin-bottom: 30px;
+      margin: 1em 0;
       display: flex;
       justify-content: space-evenly;
       flex-direction: column;
+      gap: 1.5em;
 
       a {
         text-decoration: none;
-        color: var(--white);
+        color: var(--black);
         padding: 10px 20px;
-        border: 1px solid var(--orange);
-        border-radius: 5px;
+        border: 1.5px solid var(--next-blue);
+        border-radius: 8px;
         transition: all 0.15s ease-in-out;
-        box-shadow: 0 10px 0 0 var(--orange);
+        box-shadow: 0 10px 0 0 var(--next-blue);
 
         &:hover {
-          background: var(--orange);
-          box-shadow: 0 0 0 0 var(--orange);
+          background: var(--next-blue);
+          box-shadow: 0 0 0 0 var(--next-blue), inset 0 0 10px 0 var(--grey);
           transform: translateY(10px);
           transition: all 0.15s ease-in-out;
         }
       }
     }
   }
-
-  //   .circle:hover {
-  //     border: 10px solid var(--white);
-  //     background: var(--black);
-  //     box-shadow: 0 0 0 10px var(--black);
-  //     transition: all 0.3s linear;
-
-  //     .box {
-  //       background: var(--white);
-  //       color: var(--black);
-  //       transition: all 0.3s linear;
-
-  //       .button {
-  //         a {
-  //           border: 1px solid var(--black);
-  //           color: var(--black);
-  //           transition: all 0.3s linear;
-
-  //           &:hover {
-  //             background: var(--black);
-  //             color: var(--white);
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
 }

@@ -6,6 +6,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  background: #f9fafe;
 
   .back {
     position: absolute;
@@ -14,23 +15,24 @@
     transform: translateX(-50%);
     width: 100%;
     height: 50%;
-    background: var(--black);
+    background: var(--white);
+    box-shadow: inset 0 0 20px 20px #edf4ff, 0 0 10px 30px #edf4ff;
+    border-top: #4488dc 5px solid;
     border-radius: 100% 100% 0 0;
-    z-index: -1;
+    z-index: 0;
   }
 
   .login {
-    min-width: 500px;
+    min-width: 20em;
     min-height: 350px;
     background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px 0 var(--black);
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding: 20px;
-    box-shadow: 0 0 20px 0 var(--black3);
+    box-shadow: 0 0 10px 0 #dfe3e7, 0 5px 10px 0 #dfe3e7;
     position: relative;
 
     .title {
@@ -63,7 +65,7 @@
       margin-top: 30px;
 
       .input {
-        width: 50%;
+        width: 70%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -79,7 +81,7 @@
         input {
           width: 100%;
           height: 40px;
-          border: 2px solid var(--blue);
+          border: 2px solid #4488dc;
           border-radius: 5px;
           padding: 0 10px;
           font-size: 20px;
@@ -94,23 +96,23 @@
 
         input:hover {
           border: 2px solid var(--white);
-          box-shadow: 0 0 0 2px var(--blue);
-          background: var(--blue);
+          box-shadow: 0 0 0 2px #4488dc;
+          background: #4488dc;
           color: var(--white);
         }
 
         input:focus {
           border: 2px solid var(--white);
-          box-shadow: 0 0 0 2px var(--blue);
-          background: var(--blue);
+          box-shadow: 0 0 0 2px #4488dc;
+          background: #4488dc;
           color: var(--white);
         }
       }
 
       .button {
-        width: 40%;
+        width: 50%;
         height: 40px;
-        border-radius: 5px;
+        border-radius: 8px;
         background: var(--black);
         color: #fff;
         font-size: 20px;
@@ -125,7 +127,7 @@
         position: relative;
 
         &:hover {
-          background: var(--blue);
+          background: #4488dc !important;
         }
 
         .circle {
@@ -141,8 +143,8 @@
     bottom: 10px;
     width: 400px;
     height: 40px;
-    background: var(--white);
-    border-radius: 10px;
+    background: var(--grey);
+    border-radius: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -152,12 +154,12 @@
       margin: 0;
       font-size: 20px;
       font-weight: 600;
-      color: var(--black);
+      color: var(--white);
       a {
         font-size: 20px;
         font-weight: 600;
         text-decoration: none;
-        color: var(--blue);
+        color: #4488dc;
       }
     }
   }
