@@ -14,6 +14,7 @@ const NotFound = () => {
       <div className={styles.box}>
         <div className={styles.title}>
           <h2>404</h2>
+          <h3>Page Not Found</h3>
         </div>
         <div className={styles.button}>
           <a href="javascript:history.back()">Go Back</a>

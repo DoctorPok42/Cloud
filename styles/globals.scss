@@ -15,6 +15,8 @@
   --blue: #38a6d1;
   --blue2: rgba(56, 166, 209, 0.5);
   --blue3: rgba(56, 166, 209, 0.3);
+  --blue4: rgba(56, 166, 209, 0.1);
+  --next-blue: #4488dc;
   --cyan: #1fb7ba;
   --green: #2ecc71;
   --orange: #f39c12;
@@ -51,7 +53,7 @@ h6 {
   width: calc(100vw - 0.8em);
   height: calc(100vh - 1em);
   display: flex;
-  background-color: var(--white);
+  background-color: #f9fafe;
   padding: 0.5em 0.8em;
   padding-right: 0;
   overflow: hidden;
