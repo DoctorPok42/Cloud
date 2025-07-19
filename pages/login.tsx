@@ -2,10 +2,10 @@ import Head from "next/head";
 import Image from "next/image";
 import router from "next/router";
 import { useState } from "react";
-
-import styles from "../styles/Login.module.scss";
 import { Alert } from "@mui/material";
 import { verify_token } from "./api/functions";
+
+import styles from "../styles/Login.module.scss";
 
 const Login = () => {
   const [username, setUsername] = useState<string>("");
@@ -115,10 +115,10 @@ const Login = () => {
             className={styles.button}
             style={{
               backgroundColor: loading
-                ? "var(--blue)"
+                ? "#4488dc"
                 : error != ""
                 ? "var(--red)"
-                : "var(--black)",
+                : "var(--black3)",
               cursor: loading ? "not-allowed" : "pointer",
               animation: error != "" ? "shake 0.5s" : "",
             }}
