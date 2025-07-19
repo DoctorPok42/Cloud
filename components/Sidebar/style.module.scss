@@ -8,6 +8,7 @@
   padding: 1.5em 0;
   margin-right: 0.4em;
   gap: 0.3em;
+  background-color: #f9fafe;
 
   .logo {
     display: flex;
@@ -25,6 +26,7 @@
       font-weight: 400;
       margin-left: 8px;
       color: var(--black);
+      transition: all 0.2s ease-in-out;
     }
   }
 
@@ -39,5 +41,6 @@
     color: var(--black);
     font-size: 1.2rem;
     font-weight: 1;
+    transition: all 2s ease-in-out;
   }
 }

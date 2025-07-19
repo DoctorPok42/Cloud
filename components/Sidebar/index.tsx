@@ -14,12 +14,14 @@ interface SidebarProps {
   page: Part;
   setPage: (page: Part) => void;
   loading: boolean;
+  isReduced: boolean;
 }
 
 const Sidebar = ({
   page,
   setPage,
   loading,
+  isReduced,
 }: SidebarProps) => {
   const handlChangePart = (name: string) => {
     switch (name) {
@@ -39,7 +41,11 @@ const Sidebar = ({
   };
 
   return (
-    <div className={styles.sidebar}>
+    <div className={styles.sidebar} style={{
+      width: isReduced ? "3.5%" : "13.5%",
+      transition: "width 0.3s ease-in-out",
+      overflow: "hidden",
+    }}>
       <div className={styles.logo}>
         <img
           src="/favicon.ico"
@@ -50,30 +56,37 @@ const Sidebar = ({
               : "",
           }}
         />
-        <h2>Cloud</h2>
+        {!isReduced && <h2>Cloud</h2>}
       </div>
 
       <SidebarButton
         name="my_drive"
         page={page}
         handlChangePart={handlChangePart}
+        isReduced={isReduced}
       >
-        <FontAwesomeIcon icon={faHardDrive} className={styles.sideicon} />
-        <h2>My drive</h2>
+        <FontAwesomeIcon icon={faHardDrive} className={styles.sideicon} width={22} height={22} />
+        {!isReduced && <h2>My drive</h2>}
       </SidebarButton>
 
       <SidebarButton
         name="shared_drive"
         page={page}
         handlChangePart={handlChangePart}
+        isReduced={isReduced}
       >
-        <FontAwesomeIcon icon={faUserGroup} className={styles.sideicon} />
-        <h2>Shared drive</h2>
+        <FontAwesomeIcon icon={faUserGroup} className={styles.sideicon} width={22} height={22} />
+        {!isReduced && <h2>Shared drive</h2>}
       </SidebarButton>
 
-      <SidebarButton name="music" page={page} handlChangePart={handlChangePart}>
-        <FontAwesomeIcon icon={faMusic} className={styles.sideicon} />
-        <h2>Music</h2>
+      <SidebarButton
+        name="music"
+        page={page}
+        handlChangePart={handlChangePart}
+        isReduced={isReduced}
+      >
+        <FontAwesomeIcon icon={faMusic} className={styles.sideicon} width={22} height={22} />
+        {!isReduced && <h2>Music</h2>}
       </SidebarButton>
     </div>
   );

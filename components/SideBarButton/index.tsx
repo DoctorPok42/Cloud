@@ -5,6 +5,7 @@ interface SidebarButtonProps {
   page: string;
   handlChangePart: (name: string) => void;
   children: React.ReactNode;
+  isReduced: boolean;
 }
 
 const SidebarButton = ({
@@ -12,11 +13,16 @@ const SidebarButton = ({
   page,
   handlChangePart,
   children,
+  isReduced,
 }: SidebarButtonProps) => {
   return (
     <a
       className={styles.SidebarButton}
       onClick={() => handlChangePart(name)}
+      style={{
+        backgroundColor: page === name ? "#edf4ff" : "",
+        width: isReduced ? "85%" : "95%",
+      }}
     >
       {page === name && <div className={styles.active}></div>}
       {children}
