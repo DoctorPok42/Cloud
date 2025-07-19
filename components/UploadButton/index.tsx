@@ -53,7 +53,11 @@ const UploadButton = ({
       <SpeedDial
         ariaLabel="Upload a file"
         sx={{ position: "absolute", bottom: 0, right: 0 }}
-        icon={<img src="./upload.png" />}
+        icon={
+          <div className={styles.uploadButton__icon}>
+            <img src="./upload.png" />
+          </div>
+        }
       >
         {action.map((action) => (
           <SpeedDialAction
